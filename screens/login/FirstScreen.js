@@ -25,10 +25,10 @@ const specificStyle = StyleSheet.create({
     width: "100%",
   },
   button: {
-    width: "65%",
-    height: "21%",
+    width: 240,
+    height: 95,
     padding: 4,
-    marginTop: "10%",
+    marginTop: 40,
     backgroundColor: "#76FF93",
     alignItems: "center",
     justifyContent: "center",

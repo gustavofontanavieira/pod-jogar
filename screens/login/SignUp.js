@@ -14,7 +14,6 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
 
-  console.log(password == confirmPassword ? "sim" : "não");
 
   return (
     <View>
@@ -62,8 +61,8 @@ const registerStyle = StyleSheet.create({
   },
   input: {
     backgroundColor: "#F2F2F2",
-    width: "80%",
-    height: "7%",
+    width: 330,
+    height: 53,
     borderRadius: 10,
     alignSelf: "center",
     padding: 8,

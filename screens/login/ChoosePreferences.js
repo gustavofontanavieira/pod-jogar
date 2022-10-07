@@ -22,7 +22,7 @@ const categories2 =
 ]
 
   return (
-    <View>
+    <View style={preferencesStyle.background}>
       <Text style={preferencesStyle.preferences_text}>
         Selecione seus temas preferidos
       </Text>
@@ -46,7 +46,11 @@ const categories2 =
 }
 
 const preferencesStyle = StyleSheet.create({
-  preferences_text: {
+  background: {
+    flex: 1,
+    backgroundColor: "#232323",
+  }
+  ,preferences_text: {
     color: "#F2F2F2",
     fontSize: 23,
     textAlign: "center",

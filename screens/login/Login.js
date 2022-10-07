@@ -12,7 +12,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   return (
-    <View>
+    <View style={loginStyle.background}>
       <Text style={loginStyle.login_text}>Login</Text>
       <TextInput
         placeholder="Nome"
@@ -32,7 +32,11 @@ export default function Login() {
 }
 
 const loginStyle = StyleSheet.create({
-  login_text: {
+  background: {
+    flex: 1,
+    backgroundColor: "#232323", 
+  }
+  ,login_text: {
     color: "#F2F2F2",
     fontSize: 45,
     textAlign: "center",

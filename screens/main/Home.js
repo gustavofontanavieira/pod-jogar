@@ -38,7 +38,8 @@ export default function Home(){
 
 const homeStyle = StyleSheet.create({
     viewHome: {
-        marginTop: 10
+        flex: 1,
+        backgroundColor: "#232323",
     }
     ,mediumHomeText: {
         color: "#f2f2f2",

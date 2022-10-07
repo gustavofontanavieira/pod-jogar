@@ -16,7 +16,7 @@ export default function Register() {
 
 
   return (
-    <View>
+    <View style={registerStyle.background}>
       <Text style={registerStyle.register_text}>Registre-se</Text>
       <TextInput
         placeholder="Nome"
@@ -52,7 +52,11 @@ export default function Register() {
 }
 
 const registerStyle = StyleSheet.create({
-  register_text: {
+    background: {
+      flex: 1,
+      backgroundColor: "#232323",
+    },
+    register_text: {
     color: "#F2F2F2",
     fontSize: 45,
     textAlign: "center",

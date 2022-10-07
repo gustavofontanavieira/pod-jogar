@@ -21,6 +21,7 @@ export default function FirstScreen() {
 
 const specificStyle = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#232323",
     width: "100%",
   },

@@ -7,10 +7,12 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { Component, useState } from "react";
 
 import Card from "../../components/Card";
 import DropDown from "../../components/DropDown";
+import { AudioContext } from "../../context/AudioProvider";
+import * as MediaLibrary from "expo-media-library";
 
 export default function Home({ navigation }) {
   const [podcasts, setPodcasts] = useState([
@@ -36,6 +38,16 @@ export default function Home({ navigation }) {
 
   const [search, setSearch] = useState("");
 
+  /*   const audios = [];
+  const getAudioFiles = async () => {
+    const media = await MediaLibrary.getAssetsAsync({
+      mediaType: "audio",
+    });
+    media.assets.forEach((item) => audios.push(item.filename));
+  };
+
+  getAudioFiles(); */
+
   return (
     <View style={homeStyle.viewHome}>
       <View style={homeStyle.search}>
@@ -55,7 +67,7 @@ export default function Home({ navigation }) {
       <View style={homeStyle.listPosition}>
         <DropDown />
       </View>
-      <Text style={homeStyle.mediumHomeText}>Podcasts</Text>
+      <Text style={homeStyle.mediumHomeText}>Podcasts desta categoria:</Text>
       <ScrollView>
         {podcasts.map((item, key) => {
           return (

@@ -8,11 +8,15 @@ import Tabs from "./routes/tab.routes";
 import StackRoutes from "./routes/stack.routes";
 
 import { NavigationContainer } from "@react-navigation/native";
+import { AudioProvider } from "./context/AudioProvider";
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tabs />
-    </NavigationContainer>
+    //this will get the AudioProvider always that app render and show the alert box to allow the permission
+    <AudioProvider>
+      <NavigationContainer>
+        <Tabs />
+      </NavigationContainer>
+    </AudioProvider>
   );
 }

@@ -1,8 +1,30 @@
+import { useState } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import Card from "./Card";
 
 const UserPodcasts = () => {
+  const [podcasts, setPodcasts] = useState([
+    {
+      title: "Ghost B.C 1",
+      description: "black metal band 1",
+      image: require("../assets/images/login/ghost.jpg"),
+      id: 1,
+    },
+    {
+      title: "Ghost B.C 2",
+      description: "black metal band 2",
+      image: require("../assets/images/login/ghost.jpg"),
+      id: 2,
+    },
+    {
+      title: "Ghost B.C 3",
+      description: "black metal band 3",
+      image: require("../assets/images/login/ghost.jpg"),
+      id: 3,
+    },
+  ]);
+
   return (
     <View>
       <TouchableOpacity style={userPodcastsCompStyle.containerAddPod}>
@@ -14,12 +36,9 @@ const UserPodcasts = () => {
         </View>
       </TouchableOpacity>
       <ScrollView style={userPodcastsCompStyle.podcastList}>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {podcasts.map((item, key) => {
+          return <Card prop={item} key={key} />;
+        })}
       </ScrollView>
     </View>
   );

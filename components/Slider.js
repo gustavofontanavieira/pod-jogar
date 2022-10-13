@@ -9,7 +9,9 @@ const SliderComponent = () => {
     <View>
       <View style={sliderComponentStyle.minutes}>
         <Text style={sliderComponentStyle.minutesText}>2:50</Text>
-        <Text style={sliderComponentStyle.minutesText}>{currentPosition}</Text>
+        <Text style={sliderComponentStyle.minutesText}>
+          {Math.floor(currentPosition)}
+        </Text>
       </View>
       <View style={sliderComponentStyle.sliderPlayer}>
         <Slider

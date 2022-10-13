@@ -11,7 +11,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 import SliderComponent from "../../components/Slider";
 
-const Reproduction = ({ route, navigation }) => {
+const Reproduction = ({ item, navigation }) => {
+  console.log(item);
   let rotateValueHolder = new Animated.Value(0);
 
   const RotateData = rotateValueHolder.interpolate({
@@ -35,7 +36,7 @@ const Reproduction = ({ route, navigation }) => {
     <View style={reproductionStyle.background}>
       <View style={reproductionStyle.imageFather}>
         <Animated.Image
-          source={route.params.image}
+          source={require("../../assets/images/login/ghost.jpg")}
           style={[
             reproductionStyle.image,
             { transform: [{ rotate: RotateData }] },
@@ -43,9 +44,11 @@ const Reproduction = ({ route, navigation }) => {
         />
       </View>
       <View style={reproductionStyle.text}>
-        <Text style={reproductionStyle.title}>{route.params.title}</Text>
+        <Text style={reproductionStyle.title}>
+          {/* {item.assets.filename || "titulo"} */}
+        </Text>
         <Text style={reproductionStyle.description}>
-          {route.params.description}
+          {/* {item.midificationTime || "descrição"} */}
         </Text>
       </View>
       <SliderComponent />

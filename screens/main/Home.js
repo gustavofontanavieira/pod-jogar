@@ -7,14 +7,13 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 
 import Card from "../../components/Card";
 import DropDown from "../../components/DropDown";
-import { AudioContext } from "../../context/AudioProvider";
 import * as MediaLibrary from "expo-media-library";
 
-export default function Home({ navigation }) {
+export default function Home() {
   const [podcasts, setPodcasts] = useState([
     {
       title: "Ghost B.C 1",
@@ -37,16 +36,26 @@ export default function Home({ navigation }) {
   ]);
 
   const [search, setSearch] = useState("");
+  const [audios, setAudios] = useState([]);
+  const arr = [];
 
-  /*   const audios = [];
-  const getAudioFiles = async () => {
-    const media = await MediaLibrary.getAssetsAsync({
+  /*  async function addAudio() {
+    return await MediaLibrary.getAssetsAsync({
       mediaType: "audio",
+    }).then((i) => {
+      return i;
     });
-    media.assets.forEach((item) => audios.push(item.filename));
-  };
+  }
 
-  getAudioFiles(); */
+  async function fetchAudios() {
+    await addAudio().then((i) => {
+      i.assets.map((item) => {
+        arr.push(item.filename);
+      });
+    });
+  }
+
+  fetchAudios().then(() => setAudios(arr)); */
 
   return (
     <View style={homeStyle.viewHome}>
@@ -68,7 +77,8 @@ export default function Home({ navigation }) {
         <DropDown />
       </View>
       <Text style={homeStyle.mediumHomeText}>Podcasts desta categoria:</Text>
-      <ScrollView>
+
+      {/* <ScrollView>
         {podcasts.map((item, key) => {
           return (
             <TouchableOpacity
@@ -81,14 +91,18 @@ export default function Home({ navigation }) {
             </TouchableOpacity>
           );
         })}
-      </ScrollView>
+      </ScrollView> */}
     </View>
   );
 }
 
+/*     console.log(media);
+    audios.length !== media.length
+      ? media.assets.map((item) =>)
+      : []; */
+
 const homeStyle = StyleSheet.create({
   viewHome: {
-    flex: 1,
     backgroundColor: "#232323",
   },
   mediumHomeText: {

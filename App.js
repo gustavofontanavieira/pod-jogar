@@ -12,7 +12,7 @@ import { AudioProvider } from "./context/AudioProvider";
 
 export default function App() {
   return (
-    //this will get the AudioProvider always that app render and show the alert box to allow the permission
+    //this will get the AudioProvider always that app render show the alert box to allow the permission
     <AudioProvider>
       <NavigationContainer>
         <Tabs />

@@ -2,6 +2,7 @@ import { getPermissionsAsync } from "expo-media-library";
 import React, { Component, createContext } from "react";
 import { Alert, Text, View } from "react-native";
 import * as MediaLibrary from "expo-media-library";
+import { DataProvider } from "recyclerlistview";
 
 export const AudioContext = createContext();
 
@@ -10,6 +11,10 @@ export class AudioProvider extends Component {
     super(props);
     this.state = {
       audioFiles: [],
+      permissionError: false,
+      dataProvider: new DataProvider((r1, r2) => {
+        r1 !== r2;
+      }),
     };
   }
 
@@ -28,6 +33,7 @@ export class AudioProvider extends Component {
   };
 
   getAudioFiles = async () => {
+    const { dataProvider, audioFiles } = this.state;
     let media = await MediaLibrary.getAssetsAsync({
       mediaType: "audio",
     });
@@ -36,7 +42,14 @@ export class AudioProvider extends Component {
       first: media.totalCount,
     });
 
-    this.setState({ ...this.state, audioFiles: media.assets });
+    this.setState({
+      ...this.state,
+      dataProvider: dataProvider.cloneWithRows([
+        ...audioFiles,
+        ...media.assets,
+      ]),
+      audioFiles: [...audioFiles, ...media.assets],
+    });
 
     console.log(
       media.assets.forEach((item) => {
@@ -50,6 +63,10 @@ export class AudioProvider extends Component {
     if (permission.granted) {
       //we want to get all the audio files
       this.getAudioFiles();
+    }
+
+    if (!permission.cansAskAgain && !permission.granted) {
+      this.setState({ ...this.state, permissionError: true });
     }
 
     if (!permission.granted && permission.canAskAgain) {
@@ -67,6 +84,7 @@ export class AudioProvider extends Component {
 
       if (status === "denied" && !cansAskAgain) {
         //display error to the user
+        this.setState({ ...this.state, permissionError: true });
       }
     }
     console.log(permission);
@@ -77,8 +95,17 @@ export class AudioProvider extends Component {
   }
 
   render() {
+    const { audioFiles, dataProvider, permissionError } = this.state;
+    if (this.state.permissionError)
+      return (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text>Parece que você não aceitou a permissão</Text>
+        </View>
+      );
     return (
-      <AudioContext.Provider value={{ audioFiles: this.state.audioFiles }}>
+      <AudioContext.Provider value={{ audioFiles, dataProvider }}>
         {this.props.children}
       </AudioContext.Provider>
     );

@@ -1,20 +1,18 @@
-const categories1 = [
-    {id: 1, name:"Aventura"},
-    {id: 2, name:"Ação"},
-    {id: 3, name:"Jogos Antigos"},
-    {id: 4, name:"Jogos Novos"},
-    {id: 5, name:"História"},
-    {id: 6, name: "RPG"},
-  ]
-  const categories2 = 
-  [
-    {id: 1, name:"Multiplayer"},
-    {id: 2, name:"Singleplayer"},
-    {id: 3, name:"Consoles"},
-    {id: 4, name:"PC"},
-    {id: 5, name:"Moba"},
-    {id: 6, name: "Terror"},
-  ]
+const songs = [
+  {
+    title: "By The Way",
+    artist: "Red Hot Chilli Peppers",
+    artwork: require("./assets/images/login/ghost.jpg"),
+    url: "https://sample-music.netlify.app/Bad%20Liar.mp3",
+    id: 1,
+  },
+  {
+    title: "Mary On A Cross",
+    artist: "Ghost",
+    artwork: require("./assets/images/login/ghost.jpg"),
+    url: "https://sample-music.netlify.app/death%20bed.mp3",
+    id: 1,
+  },
+];
 
-const categories = [categories1, categories2]
-export default categories;
+export default songs;

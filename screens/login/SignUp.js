@@ -14,7 +14,6 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
 
-
   return (
     <View style={registerStyle.background}>
       <Text style={registerStyle.register_text}>Registre-se</Text>
@@ -52,11 +51,11 @@ export default function Register() {
 }
 
 const registerStyle = StyleSheet.create({
-    background: {
-      flex: 1,
-      backgroundColor: "#232323",
-    },
-    register_text: {
+  background: {
+    flex: 1,
+    backgroundColor: "#232323",
+  },
+  register_text: {
     color: "#F2F2F2",
     fontSize: 45,
     textAlign: "center",

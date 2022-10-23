@@ -34,9 +34,9 @@ export default function Login() {
 const loginStyle = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "#232323", 
-  }
-  ,login_text: {
+    backgroundColor: "#232323",
+  },
+  login_text: {
     color: "#F2F2F2",
     fontSize: 45,
     textAlign: "center",
@@ -56,7 +56,7 @@ const loginStyle = StyleSheet.create({
     width: 220,
     height: 60,
     padding: 4,
-    marginTop:  75,
+    marginTop: 75,
     backgroundColor: "#76FF93",
     alignItems: "center",
     justifyContent: "center",

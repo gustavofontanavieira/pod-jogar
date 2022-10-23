@@ -1,25 +1,24 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, {useState} from "react"
+import React, { useState } from "react";
 
 export default function ChoosePreferences() {
-const [textStyle, setTextStyle] = useState(false)
-const categories1 = [
-  {id: 1, name:"Aventura"},
-  {id: 2, name:"Ação"},
-  {id: 3, name:"Jogos Antigos"},
-  {id: 4, name:"Jogos Novos"},
-  {id: 5, name:"História"},
-  {id: 6, name: "RPG"},
-]
-const categories2 = 
-[
-  {id: 1, name:"Multiplayer"},
-  {id: 2, name:"Singleplayer"},
-  {id: 3, name:"Consoles"},
-  {id: 4, name:"PC"},
-  {id: 5, name:"Moba"},
-  {id: 6, name: "Terror"},
-]
+  const [textStyle, setTextStyle] = useState(false);
+  const categories1 = [
+    { id: 1, name: "Aventura" },
+    { id: 2, name: "Ação" },
+    { id: 3, name: "Jogos Antigos" },
+    { id: 4, name: "Jogos Novos" },
+    { id: 5, name: "História" },
+    { id: 6, name: "RPG" },
+  ];
+  const categories2 = [
+    { id: 1, name: "Multiplayer" },
+    { id: 2, name: "Singleplayer" },
+    { id: 3, name: "Consoles" },
+    { id: 4, name: "PC" },
+    { id: 5, name: "Moba" },
+    { id: 6, name: "Terror" },
+  ];
 
   return (
     <View style={preferencesStyle.background}>
@@ -29,12 +28,36 @@ const categories2 =
       <View style={preferencesStyle.mainView}>
         <View style={preferencesStyle.column}>
           {categories1.map((categoria, id) => {
-           return (<Text onPress={() => setTextStyle(!textStyle)} key={id} style={textStyle == false ? preferencesStyle.text : preferencesStyle.press_text}>{categoria.name}</Text>)
+            return (
+              <Text
+                onPress={() => setTextStyle(!textStyle)}
+                key={id}
+                style={
+                  textStyle == false
+                    ? preferencesStyle.text
+                    : preferencesStyle.press_text
+                }
+              >
+                {categoria.name}
+              </Text>
+            );
           })}
         </View>
         <View style={preferencesStyle.column}>
-        {categories2.map((categoria, id) => {
-           return (<Text onPress={() => setTextStyle(!textStyle)} key={id} style={textStyle == false ? preferencesStyle.text : preferencesStyle.press_text}>{categoria.name}</Text>)
+          {categories2.map((categoria, id) => {
+            return (
+              <Text
+                onPress={() => setTextStyle(!textStyle)}
+                key={id}
+                style={
+                  textStyle == false
+                    ? preferencesStyle.text
+                    : preferencesStyle.press_text
+                }
+              >
+                {categoria.name}
+              </Text>
+            );
           })}
         </View>
       </View>
@@ -49,8 +72,8 @@ const preferencesStyle = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#232323",
-  }
-  ,preferences_text: {
+  },
+  preferences_text: {
     color: "#F2F2F2",
     fontSize: 23,
     textAlign: "center",

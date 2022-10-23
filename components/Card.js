@@ -1,7 +1,6 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Text, View, Image } from "react-native";
 
-const convertTime = (minutes) => {
+/* const convertTime = (minutes) => {
   if (minutes) {
     const hrs = minutes / 60;
     const minute = hrs.toString().split(".")[0];
@@ -22,19 +21,17 @@ const convertTime = (minutes) => {
 
     return `${minute}:${sec}`;
   }
-};
+}; */
 
-export default function Card({ title, description, image }) {
+export default function Card({ prop }) {
   return (
-    <View style={cardStyle.podCard}>
+    <View style={cardStyle.podCard} key={prop.id}>
       <View style={cardStyle.viewImage}>
-        <Image source={image} style={cardStyle.podImage} />
+        <Image source={prop.image} style={cardStyle.podImage} />
       </View>
       <View style={cardStyle.cardText}>
-        <Text style={cardStyle.cardTitle}>{title}</Text>
-        <Text style={cardStyle.cardDescription}>
-          {convertTime(description)}
-        </Text>
+        <Text style={cardStyle.cardTitle}>{prop.title}</Text>
+        <Text style={cardStyle.cardDescription}>{prop.description}</Text>
       </View>
     </View>
   );

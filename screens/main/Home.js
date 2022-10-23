@@ -7,13 +7,13 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { Component, useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import Card from "../../components/Card";
 import DropDown from "../../components/DropDown";
-import * as MediaLibrary from "expo-media-library";
+/* import * as MediaLibrary from "expo-media-library"; */
 
-export default function Home() {
+export default function Home({ navigation }) {
   const [podcasts, setPodcasts] = useState([
     {
       title: "Ghost B.C 1",
@@ -40,22 +40,20 @@ export default function Home() {
   const arr = [];
 
   /*  async function addAudio() {
-    return await MediaLibrary.getAssetsAsync({
-      mediaType: "audio",
-    }).then((i) => {
-      return i;
-    });
-  }
-
-  async function fetchAudios() {
-    await addAudio().then((i) => {
-      i.assets.map((item) => {
-        arr.push(item.filename);
+      return await MediaLibrary.getAssetsAsync({
+        mediaType: "audio",
+      }).then((i) => {
+        return i;
       });
-    });
-  }
-
-  fetchAudios().then(() => setAudios(arr)); */
+    }
+    async function fetchAudios() {
+      await addAudio().then((i) => {
+        i.assets.map((item) => {
+          arr.push(item.filename);
+        });
+      });
+    }
+    fetchAudios().then(() => setAudios(arr)); */
 
   return (
     <View style={homeStyle.viewHome}>
@@ -78,7 +76,7 @@ export default function Home() {
       </View>
       <Text style={homeStyle.mediumHomeText}>Podcasts desta categoria:</Text>
 
-      {/* <ScrollView>
+      <ScrollView>
         {podcasts.map((item, key) => {
           return (
             <TouchableOpacity
@@ -91,18 +89,19 @@ export default function Home() {
             </TouchableOpacity>
           );
         })}
-      </ScrollView> */}
+      </ScrollView>
     </View>
   );
 }
 
 /*     console.log(media);
-    audios.length !== media.length
-      ? media.assets.map((item) =>)
-      : []; */
+      audios.length !== media.length
+        ? media.assets.map((item) =>)
+        : []; */
 
 const homeStyle = StyleSheet.create({
   viewHome: {
+    flex: 1,
     backgroundColor: "#232323",
   },
   mediumHomeText: {

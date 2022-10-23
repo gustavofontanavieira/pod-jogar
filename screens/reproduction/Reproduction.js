@@ -9,10 +9,14 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import SliderComponent from "../../components/Slider";
+import { Audio } from "expo-av";
+import songs from "../../data";
 
-const Reproduction = ({ item, navigation }) => {
-  console.log(item);
+import SliderComponent from "../../components/Slider";
+import { useEffect, useState } from "react";
+
+const Reproduction = ({ route, navigation }) => {
+  const { description, id, image, title } = route.params;
   let rotateValueHolder = new Animated.Value(0);
 
   const RotateData = rotateValueHolder.interpolate({
@@ -32,11 +36,44 @@ const Reproduction = ({ item, navigation }) => {
 
   startRotateImageFunction();
 
+  const [sound, setSound] = useState();
+  const [play, setPlay] = useState(false);
+  const [status, setStatus] = useState();
+
+  async function playSound() {
+    try {
+      const { sound } = await Audio.Sound.createAsync({
+        uri: "https://sample-music.netlify.app/Bad%20Liar.mp3",
+      });
+      setSound(sound);
+
+      if (play) {
+        setPlay(false);
+        await sound.stopAsync();
+      } else {
+        setPlay(true);
+        await sound.playAsync();
+        setStatus(await sound.getStatusAsync());
+        console.log(status);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
   return (
     <View style={reproductionStyle.background}>
       <View style={reproductionStyle.imageFather}>
         <Animated.Image
-          source={require("../../assets/images/login/ghost.jpg")}
+          source={image}
           style={[
             reproductionStyle.image,
             { transform: [{ rotate: RotateData }] },
@@ -44,11 +81,9 @@ const Reproduction = ({ item, navigation }) => {
         />
       </View>
       <View style={reproductionStyle.text}>
-        <Text style={reproductionStyle.title}>
-          {/* {item.assets.filename || "titulo"} */}
-        </Text>
+        <Text style={reproductionStyle.title}>{title || "titulo"}</Text>
         <Text style={reproductionStyle.description}>
-          {/* {item.midificationTime || "descrição"} */}
+          {description || "descrição"}
         </Text>
       </View>
       <SliderComponent />
@@ -56,7 +91,7 @@ const Reproduction = ({ item, navigation }) => {
         <TouchableOpacity style={reproductionStyle.return}>
           <Ionicons name="play-skip-back-outline" color={"#000"} size={30} />
         </TouchableOpacity>
-        <TouchableOpacity style={reproductionStyle.pause}>
+        <TouchableOpacity style={reproductionStyle.pause} onPress={playSound}>
           <Ionicons name="play" color={"#000"} size={34} />
         </TouchableOpacity>
         <TouchableOpacity style={reproductionStyle.skip}>

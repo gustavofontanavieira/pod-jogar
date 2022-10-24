@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 
 const Reproduction = ({ route, navigation }) => {
   const { description, id, image, title } = route.params;
+
   let rotateValueHolder = new Animated.Value(0);
 
   const RotateData = rotateValueHolder.interpolate({
@@ -37,24 +38,29 @@ const Reproduction = ({ route, navigation }) => {
   startRotateImageFunction();
 
   const [sound, setSound] = useState();
+  const [soundInfo, setSoundInfo] = useState();
   const [play, setPlay] = useState(false);
   const [status, setStatus] = useState();
+  const [seconds, setSeconds] = useState();
+  const [slider, setSlider] = useState(false);
 
   async function playSound() {
     try {
-      const { sound } = await Audio.Sound.createAsync({
-        uri: "https://sample-music.netlify.app/Bad%20Liar.mp3",
-      });
+      const { sound, status } = await Audio.Sound.createAsync(
+        require("../../assets/YearZero.mp3")
+      );
       setSound(sound);
 
       if (play) {
         setPlay(false);
         await sound.stopAsync();
       } else {
+        setSeconds(status.durationMillis);
         setPlay(true);
+        setSlider(true);
         await sound.playAsync();
-        setStatus(await sound.getStatusAsync());
-        console.log(status);
+
+        /*         setStatus(await sound.getStatusAsync()); */
       }
     } catch (err) {
       console.log(err);
@@ -86,13 +92,13 @@ const Reproduction = ({ route, navigation }) => {
           {description || "descrição"}
         </Text>
       </View>
-      <SliderComponent />
+      {slider && <SliderComponent prop={seconds} seconds={seconds} />}
       <View style={reproductionStyle.buttons}>
         <TouchableOpacity style={reproductionStyle.return}>
           <Ionicons name="play-skip-back-outline" color={"#000"} size={30} />
         </TouchableOpacity>
         <TouchableOpacity style={reproductionStyle.pause} onPress={playSound}>
-          <Ionicons name="play" color={"#000"} size={34} />
+          <Ionicons name={play ? "play" : "stop"} color={"#000"} size={34} />
         </TouchableOpacity>
         <TouchableOpacity style={reproductionStyle.skip}>
           <Ionicons name="play-skip-forward-outline" color={"#000"} size={30} />

@@ -1,9 +1,10 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ScrollView, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import UserProfile from "../../components/User.profile";
 import UserPodcasts from "../../components/UserPodcasts";
+import Card from "../../components/Card";
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
   const [podcasts, setPodcasts] = useState([
     {
       title: "Ghost B.C 1",
@@ -28,7 +29,21 @@ const Profile = () => {
   return (
     <View style={profileStyle.background}>
       <UserProfile />
-      <UserPodcasts prop={podcasts} />
+      <UserPodcasts />
+      <ScrollView>
+        {podcasts.map((item, key) => {
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Reproduction", item);
+              }}
+              key={key}
+            >
+              <Card prop={item} />
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 };
@@ -39,5 +54,9 @@ const profileStyle = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#232323",
+  },
+  podcastList: {
+    height: 340,
+    marginTop: 8,
   },
 });

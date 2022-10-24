@@ -2,11 +2,11 @@ import Slider from "@react-native-community/slider";
 import { StyleSheet, View, Text } from "react-native";
 import React, { useState } from "react";
 
-const SliderComponent = () => {
-  /*  const convertTime = (minutes) => {
+const SliderComponent = ({ prop }) => {
+  const convertTime = (minutes) => {
     if (minutes) {
       const hrs = minutes / 60;
-      const minute = hrs.toString().split(".")[0];
+      const minute = hrs.toString()[0];
       const percent = parseInt(hrs.toString().split(".")[1].slice(0, 2));
       const sec = Math.ceil((60 * percent) / 100);
 
@@ -24,23 +24,25 @@ const SliderComponent = () => {
 
       return `${minute}:${sec}`;
     }
-  }; */
+  };
 
   const [currentPosition, setCurrentPosition] = useState(0);
 
   return (
     <View>
       <View style={sliderComponentStyle.minutes}>
-        <Text style={sliderComponentStyle.minutesText}>2:50</Text>
         <Text style={sliderComponentStyle.minutesText}>
-          {Math.floor(currentPosition)}
+          {convertTime(prop)}
+        </Text>
+        <Text style={sliderComponentStyle.minutesText}>
+          {convertTime(currentPosition)}
         </Text>
       </View>
       <View style={sliderComponentStyle.sliderPlayer}>
         <Slider
           style={sliderComponentStyle.slider}
           minimumValue={0}
-          maximumValue={360}
+          maximumValue={convertTime(prop)}
           minimumTrackTintColor={"#76FF93"}
           maximumTrackTintColor={"#f2f2f2"}
           onValueChange={(value) => {

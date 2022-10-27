@@ -29,7 +29,13 @@ const Profile = ({ navigation }) => {
   return (
     <View style={profileStyle.background}>
       <UserProfile />
-      <UserPodcasts />
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("AddPodcast");
+        }}
+      >
+        <UserPodcasts />
+      </TouchableOpacity>
       <ScrollView>
         {podcasts.map((item, key) => {
           return (

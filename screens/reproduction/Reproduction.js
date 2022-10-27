@@ -38,7 +38,6 @@ const Reproduction = ({ route, navigation }) => {
   startRotateImageFunction();
 
   const [sound, setSound] = useState();
-  const [soundInfo, setSoundInfo] = useState();
   const [play, setPlay] = useState(false);
   const [status, setStatus] = useState();
   const [seconds, setSeconds] = useState();
@@ -92,7 +91,7 @@ const Reproduction = ({ route, navigation }) => {
           {description || "descrição"}
         </Text>
       </View>
-      {slider && <SliderComponent prop={seconds} seconds={seconds} />}
+      {slider && <SliderComponent prop={seconds} />}
       <View style={reproductionStyle.buttons}>
         <TouchableOpacity style={reproductionStyle.return}>
           <Ionicons name="play-skip-back-outline" color={"#000"} size={30} />

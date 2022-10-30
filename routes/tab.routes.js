@@ -2,10 +2,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-import FirstScreen from "../screens/login/FirstScreen";
-import Config from "../screens/login/ChoosePreferences";
+import Favorites from "../screens/favorites/Favorites";
 import Profile from "../screens/profile/profile";
-import ReproductionScreen from "../screens/reproduction/Reproduction";
 
 import StackHome from "./stack.routes";
 
@@ -35,7 +33,7 @@ const Tabs = () => {
       />
 
       <Tab.Screen
-        name="Profile"
+        name="Pefil"
         component={Profile}
         options={{
           tabBarIcon: ({ size, color }) => (
@@ -45,11 +43,11 @@ const Tabs = () => {
       />
 
       <Tab.Screen
-        name="Settings"
-        component={Config}
+        name="Favoritos"
+        component={Favorites}
         options={{
           tabBarIcon: ({ size, color }) => (
-            <Ionicons name="settings" color={color} size={size} />
+            <Ionicons name="heart" color={color} size={size} />
           ),
         }}
       />

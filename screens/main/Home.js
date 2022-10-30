@@ -14,7 +14,7 @@ import DropDown from "../../components/DropDown";
 /* import * as MediaLibrary from "expo-media-library"; */
 
 export default function Home({ navigation }) {
-  const [podcasts, setPodcasts] = useState([
+  const podcasts = [
     {
       title: "Ghost B.C 1",
       description: "black metal band 1",
@@ -33,27 +33,9 @@ export default function Home({ navigation }) {
       image: require("../../assets/images/login/ghost.jpg"),
       id: 3,
     },
-  ]);
+  ];
 
   const [search, setSearch] = useState("");
-  const [audios, setAudios] = useState([]);
-  const arr = [];
-
-  /*  async function addAudio() {
-      return await MediaLibrary.getAssetsAsync({
-        mediaType: "audio",
-      }).then((i) => {
-        return i;
-      });
-    }
-    async function fetchAudios() {
-      await addAudio().then((i) => {
-        i.assets.map((item) => {
-          arr.push(item.filename);
-        });
-      });
-    }
-    fetchAudios().then(() => setAudios(arr)); */
 
   return (
     <View style={homeStyle.viewHome}>
@@ -94,11 +76,6 @@ export default function Home({ navigation }) {
   );
 }
 
-/*     console.log(media);
-      audios.length !== media.length
-        ? media.assets.map((item) =>)
-        : []; */
-
 const homeStyle = StyleSheet.create({
   viewHome: {
     flex: 1,
@@ -118,7 +95,7 @@ const homeStyle = StyleSheet.create({
   search: {
     flexDirection: "row",
     alignSelf: "center",
-    marginTop: 42,
+    marginTop: 60,
     width: "90%",
     height: 42,
     alignContent: "center",

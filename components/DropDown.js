@@ -10,6 +10,7 @@ import React, { useState } from "react";
 
 export default function DropDown() {
   const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
   const [items, setItems] = useState([
     { label: "Aventura", value: "aventura" },
     { label: "Ação", value: "ação" },
@@ -34,6 +35,8 @@ export default function DropDown() {
         items={items}
         setOpen={setOpen}
         setItems={setItems}
+        setValue={setValue}
+        value={value}
       />
     </View>
   );

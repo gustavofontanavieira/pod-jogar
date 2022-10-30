@@ -42,7 +42,7 @@ const SliderComponent = ({ prop }) => {
         <Slider
           style={sliderComponentStyle.slider}
           minimumValue={0}
-          maximumValue={convertTime(prop)}
+          maximumValue={prop}
           minimumTrackTintColor={"#76FF93"}
           maximumTrackTintColor={"#f2f2f2"}
           onValueChange={(value) => {

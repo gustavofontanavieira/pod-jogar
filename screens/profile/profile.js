@@ -1,6 +1,12 @@
-import { StyleSheet, View, ScrollView, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Text,
+} from "react-native";
 import React, { useState } from "react";
-import UserProfile from "../../components/User.profile";
 import UserPodcasts from "../../components/UserPodcasts";
 import Card from "../../components/Card";
 
@@ -28,7 +34,21 @@ const Profile = ({ navigation }) => {
 
   return (
     <View style={profileStyle.background}>
-      <UserProfile />
+      <View style={profileStyle.userContainer}>
+        <View style={profileStyle.userPicContainer}>
+          <Image
+            style={profileStyle.userPic}
+            source={require("../../assets/images/login/ghost.jpg")}
+          />
+        </View>
+        <View style={profileStyle.userDescContainer}>
+          <Text style={profileStyle.userName}>Gustavo Fontana Vieira</Text>
+          <Text style={profileStyle.description}>
+            To indo pra lá e pra cá sem saber ao certo quem sou mas tenho
+            certeza que sou uma pessoa
+          </Text>
+        </View>
+      </View>
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("AddPodcast");
@@ -63,6 +83,34 @@ const profileStyle = StyleSheet.create({
   },
   podcastList: {
     height: 340,
+    marginTop: 8,
+  },
+  userContainer: {
+    flexDirection: "row",
+    width: "95%",
+    alignSelf: "center",
+    marginTop: 50,
+    height: 164,
+    alignItems: "center",
+  },
+  userPicContainer: {
+    width: "34%",
+  },
+  userDescContainer: {
+    width: "66%",
+    padding: 8,
+  },
+  userPic: {
+    width: 120,
+    height: 120,
+    borderRadius: 100,
+  },
+  userName: {
+    color: "#f2f2f2",
+    fontSize: 20,
+  },
+  description: {
+    color: "#f2f2f2",
     marginTop: 8,
   },
 });

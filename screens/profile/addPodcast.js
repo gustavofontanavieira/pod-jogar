@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import DropDown from "../../components/DropDown";
 
 const AddPodcast = () => {
   const [image, setImage] = useState(null);
@@ -44,6 +45,9 @@ const AddPodcast = () => {
           maxLength={80}
           placeholderTextColor="#f2f2f2"
         />
+        <View style={addPodcastStyle.dropDown}>
+          <DropDown />
+        </View>
 
         {(image && (
           <Image source={{ uri: image }} style={addPodcastStyle.image} />
@@ -123,5 +127,11 @@ const addPodcastStyle = StyleSheet.create({
     alignSelf: "center",
     marginTop: 20,
     fontSize: 14,
+  },
+  dropDown: {
+    padding: 5,
+    alignSelf: "center",
+    marginTop: 5,
+    marginBottom: 5,
   },
 });

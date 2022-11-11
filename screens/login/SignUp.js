@@ -7,6 +7,8 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import userService from "../../services/userService";
+import { ScrollView } from "react-native-gesture-handler";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function SignUp({ navigation }) {
   const [name, setName] = useState("");
@@ -19,6 +21,10 @@ export default function SignUp({ navigation }) {
     "As senhas são diferentes e precisam no mínimo de 6 dígitos";
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+
+  useEffect(() => {
+    navigation.getParent().setOptions({ tabBarStyle: { display: "none" } });
+  }, []);
 
   function Cadastrar() {
     let data = {
@@ -49,6 +55,14 @@ export default function SignUp({ navigation }) {
 
   return (
     <View style={registerStyle.background}>
+      <TouchableOpacity
+        style={registerStyle.goBack}
+        onPress={() => {
+          navigation.replace("FirstScreen");
+        }}
+      >
+        <AntDesign name="back" color={"#f2f2f2"} size={30} />
+      </TouchableOpacity>
       <Text style={registerStyle.register_text}>Registre-se</Text>
       <TextInput
         placeholder="Nome"
@@ -101,25 +115,25 @@ const registerStyle = StyleSheet.create({
   },
   register_text: {
     color: "#F2F2F2",
-    fontSize: 45,
+    fontSize: 42,
     textAlign: "center",
-    marginTop: 100,
-    marginBottom: 55,
+    marginTop: 80,
+    marginBottom: 45,
   },
   input: {
     backgroundColor: "#F2F2F2",
-    width: 330,
-    height: 53,
+    width: "90%",
+    height: 50,
     borderRadius: 10,
     alignSelf: "center",
     padding: 8,
-    marginTop: 20,
+    marginTop: 10,
   },
   button: {
     width: "65%",
     height: "8%",
     padding: 4,
-    marginTop: "15%",
+    marginTop: "6%",
     backgroundColor: "#76FF93",
     alignItems: "center",
     justifyContent: "center",
@@ -130,9 +144,18 @@ const registerStyle = StyleSheet.create({
     color: "#232323",
   },
   errorMessage: {
-    paddingLeft: 40,
-    paddingRight: 40,
+    paddingLeft: 30,
+    paddingRight: 30,
     color: "red",
     alignSelf: "center",
+  },
+  goBack: {
+    width: 30,
+    height: 30,
+    marginTop: 35,
+    marginLeft: 25,
+    borderRadius: 100,
+    position: "absolute",
+    zIndex: 1,
   },
 });

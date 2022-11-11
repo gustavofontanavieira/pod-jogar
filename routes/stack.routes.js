@@ -6,6 +6,7 @@ import Login from "../screens/login/Login";
 import SignUp from "../screens/login/SignUp";
 import FirstScreen from "../screens/login/FirstScreen";
 import AddPodcast from "../screens/profile/addPodcast";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Stack = createStackNavigator();
 

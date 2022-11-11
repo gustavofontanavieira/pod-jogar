@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import React, { useEffect } from "react";
 
 export default function FirstScreen({ navigation }) {
   function Login() {
@@ -6,8 +7,12 @@ export default function FirstScreen({ navigation }) {
   }
 
   function SignUp() {
-    navigation.replace("SignUp");
+    navigation.navigate("SignUp");
   }
+
+  useEffect(() => {
+    navigation.getParent().setOptions({ tabBarStyle: { display: "none" } });
+  }, []);
 
   return (
     <View style={specificStyle.container}>

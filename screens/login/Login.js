@@ -5,12 +5,18 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import userService from "../../services/userService";
+import { ScrollView } from "react-native-gesture-handler";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    navigation.getParent().setOptions({ tabBarStyle: { display: "none" } });
+  }, []);
 
   function Auth() {
     let loginData = {
@@ -29,21 +35,31 @@ export default function Login({ navigation }) {
 
   return (
     <View style={loginStyle.background}>
-      <Text style={loginStyle.login_text}>Login</Text>
-      <TextInput
-        placeholder="Nome"
-        style={loginStyle.input}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        placeholder="Senha"
-        style={loginStyle.input}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-      />
-      <TouchableOpacity style={loginStyle.button} onPress={Auth}>
-        <Text style={loginStyle.button_text}>Entrar</Text>
+      <TouchableOpacity
+        style={loginStyle.goBack}
+        onPress={() => {
+          navigation.replace("FirstScreen");
+        }}
+      >
+        <AntDesign name="back" color={"#f2f2f2"} size={30} />
       </TouchableOpacity>
+      <ScrollView>
+        <Text style={loginStyle.login_text}>Login</Text>
+        <TextInput
+          placeholder="Nome"
+          style={loginStyle.input}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          placeholder="Senha"
+          style={loginStyle.input}
+          onChangeText={setPassword}
+          secureTextEntry={true}
+        />
+        <TouchableOpacity style={loginStyle.button} onPress={Auth}>
+          <Text style={loginStyle.button_text}>Entrar</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
@@ -62,7 +78,7 @@ const loginStyle = StyleSheet.create({
   },
   input: {
     backgroundColor: "#F2F2F2",
-    width: 330,
+    width: "90%",
     height: 53,
     borderRadius: 10,
     alignSelf: "center",
@@ -82,5 +98,14 @@ const loginStyle = StyleSheet.create({
   },
   button_text: {
     color: "#232323",
+  },
+  goBack: {
+    width: 30,
+    height: 30,
+    marginTop: 35,
+    marginLeft: 25,
+    borderRadius: 100,
+    position: "absolute",
+    zIndex: 1,
   },
 });

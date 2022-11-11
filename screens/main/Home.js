@@ -7,7 +7,7 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Card from "../../components/Card";
 import DropDown from "../../components/DropDown";
@@ -42,6 +42,16 @@ export default function Home({ navigation }) {
   }); */
 
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    navigation.getParent().setOptions({
+      tabBarStyle: {
+        display: "flex",
+        backgroundColor: "#2c2c2b",
+        borderTopColor: "transparent",
+      },
+    });
+  }, []);
 
   return (
     <View style={homeStyle.viewHome}>

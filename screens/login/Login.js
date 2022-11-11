@@ -6,10 +6,26 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
+import userService from "../../services/userService";
 
-export default function Login() {
-  const [name, setName] = useState("");
+export default function Login({ navigation }) {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  function Auth() {
+    let loginData = {
+      email: email,
+      password: password,
+    };
+
+    userService.login(loginData).then((response) => {
+      if (response !== true) {
+        console.log("Email ou senha errados, tente novamente");
+      } else {
+        navigation.replace("Main");
+      }
+    });
+  }
 
   return (
     <View style={loginStyle.background}>
@@ -17,14 +33,15 @@ export default function Login() {
       <TextInput
         placeholder="Nome"
         style={loginStyle.input}
-        onChangeText={setName}
+        onChangeText={setEmail}
       />
       <TextInput
         placeholder="Senha"
         style={loginStyle.input}
         onChangeText={setPassword}
+        secureTextEntry={true}
       />
-      <TouchableOpacity style={loginStyle.button}>
+      <TouchableOpacity style={loginStyle.button} onPress={Auth}>
         <Text style={loginStyle.button_text}>Entrar</Text>
       </TouchableOpacity>
     </View>

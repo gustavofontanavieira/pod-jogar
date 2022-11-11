@@ -1,6 +1,14 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 
-export default function FirstScreen() {
+export default function FirstScreen({ navigation }) {
+  function Login() {
+    navigation.replace("Login");
+  }
+
+  function SignUp() {
+    navigation.replace("SignUp");
+  }
+
   return (
     <View style={specificStyle.container}>
       <Image
@@ -8,10 +16,10 @@ export default function FirstScreen() {
         source={require("../../assets/images/login/pod-jogar620.png")}
       />
       <View style={specificStyle.buttons}>
-        <TouchableOpacity style={specificStyle.button}>
+        <TouchableOpacity style={specificStyle.button} onPress={Login}>
           <Text style={specificStyle.button_text}>Login</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={specificStyle.button}>
+        <TouchableOpacity style={specificStyle.button} onPress={SignUp}>
           <Text style={specificStyle.button_text}>Sign Up</Text>
         </TouchableOpacity>
       </View>

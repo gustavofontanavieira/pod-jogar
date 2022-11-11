@@ -10,6 +10,8 @@ import React, { useState } from "react";
 import UserPodcasts from "../../components/UserPodcasts";
 import Card from "../../components/Card";
 
+import * as ImagePicker from "expo-image-picker";
+
 const Profile = ({ navigation }) => {
   const [podcasts, setPodcasts] = useState([
     {
@@ -32,14 +34,35 @@ const Profile = ({ navigation }) => {
     },
   ]);
 
+  const [image, setImage] = useState(null);
+
+  async function pickImage() {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  }
+
   return (
     <View style={profileStyle.background}>
       <View style={profileStyle.userContainer}>
         <View style={profileStyle.userPicContainer}>
-          <Image
-            style={profileStyle.userPic}
-            source={require("../../assets/images/login/ghost.jpg")}
-          />
+          <TouchableOpacity onPress={pickImage}>
+            <Image
+              style={profileStyle.userPic}
+              source={
+                image == null
+                  ? require("../../assets/images/login/defaultIcon.png")
+                  : { uri: image }
+              }
+            />
+          </TouchableOpacity>
         </View>
         <View style={profileStyle.userDescContainer}>
           <Text style={profileStyle.userName}>Gustavo Fontana Vieira</Text>

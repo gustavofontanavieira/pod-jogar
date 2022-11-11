@@ -45,12 +45,12 @@ const Reproduction = ({ route, navigation }) => {
 
   async function playSound() {
     try {
-      const { sound, status } = await Audio.Sound.createAsync(
-        require("../../assets/YearZero.mp3")
-      );
+      const { sound, status } = await Audio.Sound.createAsync({
+        uri: "https://firebasestorage.googleapis.com/v0/b/pod-jogar.appspot.com/o/QUAL%20SER%C3%81%20O%20FUTURO%20DE%20RESIDENT%20EVIL.mp3?alt=media&token=d289ca61-4a0e-4964-a26f-449517a56962",
+      });
       setSound(sound);
 
-      if (play) {
+      if (play === true) {
         setPlay(false);
         await sound.stopAsync();
       } else {

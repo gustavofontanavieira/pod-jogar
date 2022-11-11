@@ -13,6 +13,8 @@ import Card from "../../components/Card";
 import DropDown from "../../components/DropDown";
 /* import * as MediaLibrary from "expo-media-library"; */
 
+import userService from "../../services/userService";
+
 export default function Home({ navigation }) {
   const podcasts = [
     {
@@ -34,6 +36,10 @@ export default function Home({ navigation }) {
       id: 3,
     },
   ];
+
+  /*   userService.getAllUsers().then((response) => {
+    console.log(response);
+  }); */
 
   const [search, setSearch] = useState("");
 

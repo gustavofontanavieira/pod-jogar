@@ -7,6 +7,7 @@ import SignUp from "../screens/login/SignUp";
 import FirstScreen from "../screens/login/FirstScreen";
 import AddPodcast from "../screens/profile/addPodcast";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import WindowAlert from "../components/WindowAlert";
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ function StackHome() {
       <Stack.Screen name="AddPodcast" component={AddPodcast} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="AlertWindow" component={WindowAlert} />
     </Stack.Navigator>
   );
 }

@@ -14,15 +14,18 @@ import * as ImagePicker from "expo-image-picker";
 import userService from "../../services/userService";
 const DEFAULT_USER_PICTURE = require("../../assets/images/login/defaultIcon.png");
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AntDesign } from "@expo/vector-icons";
+import WindowAlert from "../../components/WindowAlert";
 
 const Profile = ({ navigation }) => {
   const [userId, setUserId] = useState("");
   const [userData, setUserData] = useState("");
   const [image, setImage] = useState(DEFAULT_USER_PICTURE);
+  const [windowAlert, setWindowAlert] = useState(false);
 
   const getUserId = async () => {
     const value = await AsyncStorage.getItem("userId");
-    setUserId(value);
+    setUserId(JSON.parse(value));
   };
   getUserId();
 
@@ -87,8 +90,24 @@ const Profile = ({ navigation }) => {
     }
   }
 
+  function Window() {
+    setWindowAlert(!windowAlert);
+  }
+
+  function Quit() {
+    setWindowAlert(!windowAlert);
+    AsyncStorage.clear().then(() => {
+      navigation.navigate("FirstScreen");
+    });
+  }
+
   return (
     <View style={profileStyle.background}>
+      {windowAlert && <WindowAlert prop={Quit} />}
+
+      <TouchableOpacity style={profileStyle.goBack} onPress={Window}>
+        <AntDesign name="back" color={"#f2f2f2"} size={30} />
+      </TouchableOpacity>
       <View style={profileStyle.userContainer}>
         <View style={profileStyle.userPicContainer}>
           <TouchableOpacity onPress={pickImage}>
@@ -168,5 +187,14 @@ const profileStyle = StyleSheet.create({
   description: {
     color: "#f2f2f2",
     marginTop: 8,
+  },
+  goBack: {
+    width: 30,
+    height: 30,
+    marginTop: 40,
+    marginLeft: "88%",
+    borderRadius: 100,
+    position: "absolute",
+    zIndex: 1,
   },
 });

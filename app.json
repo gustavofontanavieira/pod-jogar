@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Pod-jogar-novo",
-    "slug": "Pod-jogar-novo",
+    "name": "Pod-jogar",
+    "slug": "Pod-jogar",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

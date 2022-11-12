@@ -43,8 +43,12 @@ class UserService {
       data: data,
     })
       .then(async (response) => {
-        AsyncStorage.setItem("userId", response.data);
-        return Promise.resolve(response.data);
+        if (response === false) {
+          return Promise.resolve(response.data);
+        } else if (response !== Boolean) {
+          AsyncStorage.setItem("userId", JSON.stringify(response.data));
+          return Promise.resolve(response.data);
+        }
       })
       .catch((error) => {
         Promise.reject(error);

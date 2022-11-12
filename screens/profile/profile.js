@@ -6,13 +6,53 @@ import {
   Image,
   Text,
 } from "react-native";
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import UserPodcasts from "../../components/UserPodcasts";
 import Card from "../../components/Card";
-
 import * as ImagePicker from "expo-image-picker";
+import userService from "../../services/userService";
+const DEFAULT_USER_PICTURE = require("../../assets/images/login/defaultIcon.png");
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile = ({ navigation }) => {
+  const [userId, setUserId] = useState("");
+  const [userData, setUserData] = useState("");
+  const [image, setImage] = useState(DEFAULT_USER_PICTURE);
+
+  const getUserId = async () => {
+    const value = await AsyncStorage.getItem("userId");
+    setUserId(value);
+  };
+  getUserId();
+
+  useEffect(() => {
+    if (userId !== "") {
+      userService
+        .getUserById(userId)
+        .then((response) => {
+          setUserData(response);
+          response.image == null ? "" : setImage({ uri: response.image });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [userId]);
+
+  function updateImage(newImage) {
+    const img = { image: newImage };
+    userService
+      .updateUserById(userId, img)
+      .then((response) => {
+        setUserData(response);
+        response.image == null ? "" : setImage({ uri: response.image });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   const [podcasts, setPodcasts] = useState([
     {
       title: "Ghost B.C 1",
@@ -34,18 +74,16 @@ const Profile = ({ navigation }) => {
     },
   ]);
 
-  const [image, setImage] = useState(null);
-
   async function pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 1,
     });
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      updateImage(result.uri);
     }
   }
 
@@ -54,18 +92,13 @@ const Profile = ({ navigation }) => {
       <View style={profileStyle.userContainer}>
         <View style={profileStyle.userPicContainer}>
           <TouchableOpacity onPress={pickImage}>
-            <Image
-              style={profileStyle.userPic}
-              source={
-                image == null
-                  ? require("../../assets/images/login/defaultIcon.png")
-                  : { uri: image }
-              }
-            />
+            <Image style={profileStyle.userPic} source={image} />
           </TouchableOpacity>
         </View>
         <View style={profileStyle.userDescContainer}>
-          <Text style={profileStyle.userName}>Gustavo Fontana Vieira</Text>
+          <Text style={profileStyle.userName}>
+            {`${userData.name} ${userData.lastName}`}
+          </Text>
           <Text style={profileStyle.description}>
             To indo pra lá e pra cá sem saber ao certo quem sou mas tenho
             certeza que sou uma pessoa

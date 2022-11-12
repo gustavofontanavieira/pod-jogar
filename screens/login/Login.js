@@ -13,6 +13,7 @@ import { AntDesign } from "@expo/vector-icons";
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     navigation.getParent().setOptions({ tabBarStyle: { display: "none" } });
@@ -25,8 +26,8 @@ export default function Login({ navigation }) {
     };
 
     userService.login(loginData).then((response) => {
-      if (response !== true) {
-        console.log("Email ou senha errados, tente novamente");
+      if (response === false) {
+        setError(true);
       } else {
         navigation.replace("Main");
       }
@@ -46,16 +47,26 @@ export default function Login({ navigation }) {
       <ScrollView>
         <Text style={loginStyle.login_text}>Login</Text>
         <TextInput
-          placeholder="Nome"
+          placeholder="E-mail"
           style={loginStyle.input}
           onChangeText={setEmail}
         />
+        {error && (
+          <Text style={loginStyle.errorText}>
+            Email ou senha errados, tente novamente
+          </Text>
+        )}
         <TextInput
           placeholder="Senha"
           style={loginStyle.input}
           onChangeText={setPassword}
           secureTextEntry={true}
         />
+        {error && (
+          <Text style={loginStyle.errorText}>
+            Email ou senha errados, tente novamente
+          </Text>
+        )}
         <TouchableOpacity style={loginStyle.button} onPress={Auth}>
           <Text style={loginStyle.button_text}>Entrar</Text>
         </TouchableOpacity>
@@ -107,5 +118,10 @@ const loginStyle = StyleSheet.create({
     borderRadius: 100,
     position: "absolute",
     zIndex: 1,
+  },
+  errorText: {
+    color: "red",
+    paddingRight: 10,
+    paddingLeft: 10,
   },
 });

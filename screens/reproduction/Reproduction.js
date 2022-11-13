@@ -16,7 +16,7 @@ import SliderComponent from "../../components/Slider";
 import { useEffect, useState } from "react";
 
 const Reproduction = ({ route, navigation }) => {
-  const { description, id, image, title } = route.params;
+  const { name, description, id, image, title } = route.params;
 
   let rotateValueHolder = new Animated.Value(0);
 
@@ -78,7 +78,7 @@ const Reproduction = ({ route, navigation }) => {
     <View style={reproductionStyle.background}>
       <View style={reproductionStyle.imageFather}>
         <Animated.Image
-          source={image}
+          source={{ uri: image }}
           style={[
             reproductionStyle.image,
             { transform: [{ rotate: RotateData }] },
@@ -86,7 +86,7 @@ const Reproduction = ({ route, navigation }) => {
         />
       </View>
       <View style={reproductionStyle.text}>
-        <Text style={reproductionStyle.title}>{title || "titulo"}</Text>
+        <Text style={reproductionStyle.title}>{name || "titulo"}</Text>
         <Text style={reproductionStyle.description}>
           {description || "descrição"}
         </Text>

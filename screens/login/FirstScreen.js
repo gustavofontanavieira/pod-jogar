@@ -25,7 +25,7 @@ export default function FirstScreen({ navigation }) {
           <Text style={specificStyle.button_text}>Login</Text>
         </TouchableOpacity>
         <TouchableOpacity style={specificStyle.button} onPress={SignUp}>
-          <Text style={specificStyle.button_text}>Sign Up</Text>
+          <Text style={specificStyle.button_text}>Registrar-se</Text>
         </TouchableOpacity>
       </View>
     </View>

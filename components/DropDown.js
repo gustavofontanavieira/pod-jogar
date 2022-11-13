@@ -7,24 +7,19 @@ import {
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import React, { useState } from "react";
+import categorieService from "../services/categoriesService";
 
 export default function DropDown() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "Aventura", value: "aventura" },
-    { label: "Ação", value: "ação" },
-    { label: "Jogos Antigos", value: "jogos Antigos" },
-    { label: "Jogos Novos", value: "jogos Novos" },
-    { label: "História", value: "história" },
-    { label: "RPG", value: "rpg" },
-    { label: "Multiplayer", value: "multiplayer" },
-    { label: "Singleplayer", value: "singleplayer" },
-    { label: "Consoles", value: "consoles" },
-    { label: "PC", value: "pC" },
-    { label: "Moba", value: "moba" },
-    { label: "Terror", value: "terror" },
-  ]);
+  const categories = [];
+  const [items, setItems] = useState(categories);
+
+  categorieService.getAllCategories().then((response) => {
+    response.map((item) => {
+      categories.push({ label: item.name, value: item.name.toLowerCase() });
+    });
+  });
 
   return (
     <View style={dropDownPickerStyle.dropView}>

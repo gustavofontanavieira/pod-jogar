@@ -16,12 +16,15 @@ const DEFAULT_USER_PICTURE = require("../../assets/images/login/defaultIcon.png"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign } from "@expo/vector-icons";
 import WindowAlert from "../../components/WindowAlert";
+import podcastService from "../../services/podcastService";
 
 const Profile = ({ navigation }) => {
   const [userId, setUserId] = useState("");
   const [userData, setUserData] = useState("");
   const [image, setImage] = useState(DEFAULT_USER_PICTURE);
   const [windowAlert, setWindowAlert] = useState(false);
+  const [load, setLoading] = useState(false);
+  const [podcasts, setPodcasts] = useState([]);
 
   const getUserId = async () => {
     const value = await AsyncStorage.getItem("userId");
@@ -40,8 +43,15 @@ const Profile = ({ navigation }) => {
         .catch((error) => {
           console.log(error);
         });
+      podcastService.getAll(userId).then((response) => {
+        setPodcasts(response);
+      });
     }
   }, [userId]);
+
+  useEffect(() => {
+    setLoading(true);
+  }, [podcasts]);
 
   function updateImage(newImage) {
     const img = { image: newImage };
@@ -56,26 +66,9 @@ const Profile = ({ navigation }) => {
       });
   }
 
-  const [podcasts, setPodcasts] = useState([
-    {
-      title: "Ghost B.C 1",
-      description: "black metal band 1",
-      image: require("../../assets/images/login/ghost.jpg"),
-      id: 1,
-    },
-    {
-      title: "Ghost B.C 2",
-      description: "black metal band 2",
-      image: require("../../assets/images/login/ghost.jpg"),
-      id: 2,
-    },
-    {
-      title: "Ghost B.C 3",
-      description: "black metal band 3",
-      image: require("../../assets/images/login/ghost.jpg"),
-      id: 3,
-    },
-  ]);
+  useEffect(() => {
+    setLoading(true);
+  }, [podcasts]);
 
   async function pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -131,20 +124,7 @@ const Profile = ({ navigation }) => {
       >
         <UserPodcasts />
       </TouchableOpacity>
-      <ScrollView>
-        {podcasts.map((item, key) => {
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("Reproduction", item);
-              }}
-              key={key}
-            >
-              <Card prop={item} />
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+      <ScrollView>{load && <Card prop={podcasts} />}</ScrollView>
     </View>
   );
 };

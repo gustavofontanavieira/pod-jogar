@@ -14,32 +14,31 @@ import DropDown from "../../components/DropDown";
 /* import * as MediaLibrary from "expo-media-library"; */
 
 import userService from "../../services/userService";
+import podcastService from "../../services/podcastService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home({ navigation }) {
-  const podcasts = [
-    {
-      title: "Ghost B.C 1",
-      description: "black metal band 1",
-      image: require("../../assets/images/login/ghost.jpg"),
-      id: 1,
-    },
-    {
-      title: "Ghost B.C 2",
-      description: "black metal band 2",
-      image: require("../../assets/images/login/ghost.jpg"),
-      id: 2,
-    },
-    {
-      title: "Ghost B.C 3",
-      description: "black metal band 3",
-      image: require("../../assets/images/login/ghost.jpg"),
-      id: 3,
-    },
-  ];
+  const [userId, setUserId] = useState(String);
+  const [load, setLoading] = useState(false);
+  const [podcasts, setPodcasts] = useState([]);
 
-  /*   userService.getAllUsers().then((response) => {
-    console.log(response);
-  }); */
+  const getUserId = async () => {
+    const value = await AsyncStorage.getItem("userId");
+    setUserId(JSON.parse(value));
+  };
+  getUserId();
+
+  useEffect(() => {
+    setLoading(true);
+  }, [podcasts]);
+
+  useEffect(() => {
+    if (userId !== "") {
+      podcastService.getAll(userId).then((response) => {
+        setPodcasts(response);
+      });
+    }
+  }, [userId]);
 
   const [search, setSearch] = useState("");
 
@@ -74,20 +73,7 @@ export default function Home({ navigation }) {
       </View>
       <Text style={homeStyle.mediumHomeText}>Podcasts desta categoria:</Text>
 
-      <ScrollView>
-        {podcasts.map((item, key) => {
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("Reproduction", item);
-              }}
-              key={key}
-            >
-              <Card prop={item} />
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+      <ScrollView>{load && <Card prop={podcasts} />}</ScrollView>
     </View>
   );
 }

@@ -1,4 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
+import { useState } from "react";
 import {
   View,
   StyleSheet,
@@ -7,54 +10,35 @@ import {
   ScrollView,
 } from "react-native";
 import Card from "../../components/Card";
+import podcastService from "../../services/podcastService";
 
 const Favorites = ({ navigation }) => {
-  const podcasts = [
-    {
-      title: "Ghost B.C 1",
-      description: "black metal band 1",
-      image: require("../../assets/images/login/ghost.jpg"),
-      id: 1,
-    },
-    {
-      title: "Ghost B.C 2",
-      description: "black metal band 2",
-      image: require("../../assets/images/login/ghost.jpg"),
-      id: 2,
-    },
-    {
-      title: "Ghost B.C 3",
-      description: "black metal band 3",
-      image: require("../../assets/images/login/ghost.jpg"),
-      id: 3,
-    },
-  ];
+  const [userId, setUserId] = useState(String);
+  const [load, setLoading] = useState(false);
+  const [podcasts, setPodcasts] = useState([]);
+
+  const getUserId = async () => {
+    const value = await AsyncStorage.getItem("userId");
+    setUserId(JSON.parse(value));
+  };
+  getUserId();
+
+  useEffect(() => {
+    setLoading(true);
+  }, [podcasts]);
+
+  useEffect(() => {
+    if (userId !== "") {
+      podcastService.getAll(userId).then((response) => {
+        setPodcasts(response);
+      });
+    }
+  }, [userId]);
 
   return (
     <View style={favoritesStyle.mainView}>
       <Text style={favoritesStyle.text}>Podcast favoritados</Text>
-      <ScrollView>
-        {podcasts.map((item, key) => {
-          return (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("Reproduction", item);
-              }}
-              key={key}
-            >
-              <View style={favoritesStyle.heartView}>
-                <Ionicons
-                  name="heart"
-                  size={32}
-                  color={"red"}
-                  style={favoritesStyle.touchable}
-                />
-              </View>
-              <Card prop={item} />
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+      <ScrollView>{load && <Card prop={podcasts} />}</ScrollView>
     </View>
   );
 };

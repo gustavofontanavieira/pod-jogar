@@ -11,10 +11,17 @@ import {
 import React, { useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from "expo-media-library";
 import DropDown from "../../components/DropDown";
+import WindowAlert from "../../components/WindowAlert";
+import { useEffect } from "react";
+import SelectAudio from "../../components/AudioList";
 
 const AddPodcast = () => {
   const [image, setImage] = useState(null);
+  const [load, setLoading] = useState(false);
+  const [selectAudio, setSelectAudio] = useState(false);
+  const [audios, setAudios] = useState([]);
 
   async function pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -26,12 +33,46 @@ const AddPodcast = () => {
 
     if (!result.cancelled) {
       setImage(result.uri);
-      console.log(image);
     }
   }
 
+  async function PickAudioFile() {
+    if ((await MediaLibrary.getPermissionsAsync()).granted) {
+      setLoading(false);
+
+      if (audios !== [] || audios !== undefined) {
+        setSelectAudio(true);
+      }
+
+      const media = await MediaLibrary.getAssetsAsync({
+        mediaType: "audio",
+      });
+      setAudios(media.assets);
+    } else {
+      await MediaLibrary.requestPermissionsAsync();
+      setLoading(false);
+    }
+  }
+
+  const content = {
+    title: "Permissão",
+    paragraph: "Permitir que o app acesse arquivos?",
+  };
+
+  function Quit() {
+    setLoading(false);
+  }
+
+  useEffect(() => {}, [audios]);
+
   return (
     <View style={addPodcastStyle.mainView}>
+      {load && (
+        <WindowAlert message={content} nonquite={Quit} prop={PickAudioFile} />
+      )}
+
+      {selectAudio && <SelectAudio audios={audios} />}
+
       <Text style={addPodcastStyle.title}>Adicionar Novo Podcast</Text>
       <View style={addPodcastStyle.containerInputs}>
         <TextInput
@@ -57,7 +98,7 @@ const AddPodcast = () => {
         </TouchableOpacity>
 
         <Text style={addPodcastStyle.addImage}>Selecionar áudio</Text>
-        <TouchableOpacity style={addPodcastStyle.icon}>
+        <TouchableOpacity style={addPodcastStyle.icon} onPress={PickAudioFile}>
           <MaterialIcons name="multitrack-audio" color={"#76FF93"} size={42} />
         </TouchableOpacity>
       </View>

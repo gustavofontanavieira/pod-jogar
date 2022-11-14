@@ -7,16 +7,15 @@ import {
   Animated,
   Easing,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 import { Audio } from "expo-av";
-import songs from "../../data";
 
 import SliderComponent from "../../components/Slider";
 import { useEffect, useState } from "react";
 
 const Reproduction = ({ route, navigation }) => {
-  const { name, description, id, image, title } = route.params;
+  const { name, description, id, image, file } = route.params;
 
   let rotateValueHolder = new Animated.Value(0);
 
@@ -39,17 +38,16 @@ const Reproduction = ({ route, navigation }) => {
 
   const [sound, setSound] = useState();
   const [play, setPlay] = useState(false);
-  const [status, setStatus] = useState();
   const [seconds, setSeconds] = useState();
   const [slider, setSlider] = useState(false);
 
   async function playSound() {
-    try {
-      const { sound, status } = await Audio.Sound.createAsync({
-        uri: "https://firebasestorage.googleapis.com/v0/b/pod-jogar.appspot.com/o/QUAL%20SER%C3%81%20O%20FUTURO%20DE%20RESIDENT%20EVIL.mp3?alt=media&token=d289ca61-4a0e-4964-a26f-449517a56962",
-      });
-      setSound(sound);
+    const { sound, status } = await Audio.Sound.createAsync({
+      uri: file,
+    });
+    setSound(sound);
 
+    try {
       if (play === true) {
         setPlay(false);
         await sound.stopAsync();
@@ -58,11 +56,9 @@ const Reproduction = ({ route, navigation }) => {
         setPlay(true);
         setSlider(true);
         await sound.playAsync();
-
-        /*         setStatus(await sound.getStatusAsync()); */
       }
     } catch (err) {
-      console.log(err);
+      console.log("Som não achado");
     }
   }
 
@@ -76,6 +72,14 @@ const Reproduction = ({ route, navigation }) => {
 
   return (
     <View style={reproductionStyle.background}>
+      <TouchableOpacity
+        style={reproductionStyle.goBack}
+        onPress={() => {
+          navigation.replace("Main");
+        }}
+      >
+        <AntDesign name="back" color={"#f2f2f2"} size={30} />
+      </TouchableOpacity>
       <View style={reproductionStyle.imageFather}>
         <Animated.Image
           source={{ uri: image }}
@@ -168,5 +172,14 @@ const reproductionStyle = StyleSheet.create({
     justifyContent: "space-evenly",
     alignSelf: "center",
     alignItems: "center",
+  },
+  goBack: {
+    width: 30,
+    height: 30,
+    marginTop: 50,
+    marginLeft: 25,
+    borderRadius: 100,
+    position: "absolute",
+    zIndex: 1,
   },
 });

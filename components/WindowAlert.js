@@ -2,14 +2,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
-export default function WindowAlert({ navigation, prop }) {
+export default function WindowAlert({ navigation, prop, nonquite, message }) {
   return (
     <View style={windowStyle.window}>
-      <Text style={windowStyle.title}>Sair da conta</Text>
+      <Text style={windowStyle.title}>{message.title}</Text>
       <View style={windowStyle.divider} />
-      <Text style={windowStyle.paragraph}>Deseja sair da sua conta?</Text>
+      <Text style={windowStyle.paragraph}>{message.paragraph}</Text>
       <View style={windowStyle.buttons}>
-        <TouchableOpacity style={windowStyle.buttonCancel}>
+        <TouchableOpacity style={windowStyle.buttonCancel} onPress={nonquite}>
           <Text style={windowStyle.buttonText}>Cancelar</Text>
         </TouchableOpacity>
         <TouchableOpacity style={windowStyle.buttonConfirm} onPress={prop}>
@@ -26,7 +26,7 @@ const windowStyle = StyleSheet.create({
     position: "absolute",
     marginTop: "65%",
     width: "88%",
-    height: "25%",
+    height: "26%",
     backgroundColor: "#111111",
     alignSelf: "center",
     borderRadius: 25,

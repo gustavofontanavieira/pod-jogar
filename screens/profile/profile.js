@@ -94,9 +94,20 @@ const Profile = ({ navigation }) => {
     });
   }
 
+  function NonQuite() {
+    setWindowAlert(!windowAlert);
+  }
+
+  const content = {
+    title: "Sair da conta",
+    paragraph: "Deseja sair da sua conta?",
+  };
+
   return (
     <View style={profileStyle.background}>
-      {windowAlert && <WindowAlert prop={Quit} />}
+      {windowAlert && (
+        <WindowAlert prop={Quit} nonquite={NonQuite} message={content} />
+      )}
 
       <TouchableOpacity style={profileStyle.goBack} onPress={Window}>
         <AntDesign name="back" color={"#f2f2f2"} size={30} />

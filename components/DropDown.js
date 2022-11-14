@@ -48,5 +48,6 @@ const dropDownPickerStyle = StyleSheet.create({
   dropView: {
     width: "90%",
     height: 25,
+    zIndex: 0,
   },
 });

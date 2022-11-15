@@ -9,17 +9,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import React, { useState } from "react";
 import categorieService from "../services/categoriesService";
 
-export default function DropDown() {
+export default function DropDown({ items, setItems, value, setValue }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const categories = [];
-  const [items, setItems] = useState(categories);
-
-  categorieService.getAllCategories().then((response) => {
-    response.map((item) => {
-      categories.push({ label: item.name, value: item.name.toLowerCase() });
-    });
-  });
 
   return (
     <View style={dropDownPickerStyle.dropView}>
@@ -48,6 +39,6 @@ const dropDownPickerStyle = StyleSheet.create({
   dropView: {
     width: "90%",
     height: 25,
-    zIndex: 0,
+    zIndex: 1,
   },
 });

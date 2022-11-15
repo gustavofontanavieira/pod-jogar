@@ -1,33 +1,44 @@
 import {
   StyleSheet,
   View,
-  ScrollView,
   TouchableOpacity,
   Text,
   TextInput,
-  Button,
   Image,
 } from "react-native";
 import React, { useState } from "react";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import DropDown from "../../components/DropDown";
 import WindowAlert from "../../components/WindowAlert";
 import { useEffect } from "react";
 import SelectAudio from "../../components/AudioList";
+import categorieService from "../../services/categoriesService";
+import podcastService from "../../services/podcastService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const AddPodcast = () => {
-  const [image, setImage] = useState(null);
+const AddPodcast = ({ navigation }) => {
   const [load, setLoading] = useState(false);
   const [selectAudio, setSelectAudio] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
   const [audios, setAudios] = useState([]);
+  const categories = [];
+  const [items, setItems] = useState(categories);
+
+  const [userId, setUserId] = useState(String);
+
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [value, setValue] = useState(null);
+  const [image, setImage] = useState(null);
+  const [audio, setAudio] = useState("");
 
   async function pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 1,
     });
 
@@ -65,46 +76,126 @@ const AddPodcast = () => {
 
   useEffect(() => {}, [audios]);
 
+  categorieService.getAllCategories().then((response) => {
+    response.map((item) => {
+      categories.push({ label: item.name, value: item.name.toLowerCase() });
+    });
+  });
+
+  async function CreatePodcast() {
+    const data = {
+      name: name,
+      description: description,
+      image: image,
+      file: audio,
+      categoriesId: value,
+    };
+
+    const value = await AsyncStorage.getItem("userId");
+
+    if (
+      name === "" ||
+      description === "" ||
+      image === null ||
+      audio === "" ||
+      value === null
+    ) {
+      setErrorMessage(true);
+    } else {
+      podcastService.create(JSON.parse(value), data).then((response) => {
+        setName("");
+        setDescription("");
+        setImage(null);
+        setAudio("");
+        setValue(null);
+        setErrorMessage(false);
+        () => {
+          navigation.navigate("Home");
+        };
+      });
+    }
+  }
+
   return (
     <View style={addPodcastStyle.mainView}>
+      <TouchableOpacity
+        style={addPodcastStyle.goBack}
+        onPress={() => {
+          navigation.navigate("Main");
+        }}
+      >
+        <AntDesign name="back" color={"#f2f2f2"} size={30} />
+      </TouchableOpacity>
       {load && (
         <WindowAlert message={content} nonquite={Quit} prop={PickAudioFile} />
       )}
 
-      {selectAudio && <SelectAudio audios={audios} />}
+      {selectAudio && (
+        <SelectAudio
+          audios={audios}
+          setAudio={setAudio}
+          setSelectAudio={setSelectAudio}
+        />
+      )}
 
       <Text style={addPodcastStyle.title}>Adicionar Novo Podcast</Text>
+      {errorMessage && (
+        <Text style={addPodcastStyle.errorMessage}>
+          Por favor preencha todos os campos
+        </Text>
+      )}
       <View style={addPodcastStyle.containerInputs}>
         <TextInput
           style={addPodcastStyle.input}
           placeholder="Título do podcast"
           placeholderTextColor="#f2f2f2"
+          onChangeText={setName}
         />
         <TextInput
           style={addPodcastStyle.input}
           placeholder="Breve descrição"
           maxLength={80}
           placeholderTextColor="#f2f2f2"
+          onChangeText={setDescription}
         />
         <View style={addPodcastStyle.dropDown}>
-          <DropDown />
+          <DropDown
+            items={items}
+            setItems={setItems}
+            categories={categories}
+            value={value}
+            setValue={setValue}
+          />
         </View>
 
-        {(image && (
-          <Image source={{ uri: image }} style={addPodcastStyle.image} />
-        )) || <Text style={addPodcastStyle.addImage}>Selecionar Imagem</Text>}
         <TouchableOpacity style={addPodcastStyle.icon} onPress={pickImage}>
-          <Ionicons name="camera" color={"#76FF93"} size={42} />
+          {(image === null && (
+            <View>
+              <Text style={addPodcastStyle.addImage}>Selecionar Imagem</Text>
+              <Ionicons
+                name="camera"
+                color={"#76FF93"}
+                size={42}
+                style={addPodcastStyle.camera}
+              />
+            </View>
+          )) ||
+            (image !== null && (
+              <Image source={{ uri: image }} style={addPodcastStyle.image} />
+            ))}
         </TouchableOpacity>
 
-        <Text style={addPodcastStyle.addImage}>Selecionar áudio</Text>
         <TouchableOpacity style={addPodcastStyle.icon} onPress={PickAudioFile}>
-          <MaterialIcons name="multitrack-audio" color={"#76FF93"} size={42} />
+          <View style={addPodcastStyle.podCard}>
+            <Text style={addPodcastStyle.cardTitle}>
+              {audio || "Selecionar áudio"}
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={addPodcastStyle.button}>
-        <Text>Adicionar</Text>
+      <TouchableOpacity style={addPodcastStyle.button} onPress={CreatePodcast}>
+        <Text>Criar Podcast</Text>
       </TouchableOpacity>
     </View>
   );
@@ -121,7 +212,7 @@ const addPodcastStyle = StyleSheet.create({
     color: "#f2f2f2",
     fontSize: 24,
     textAlign: "center",
-    marginTop: 70,
+    marginTop: 90,
   },
   containerInputs: {
     width: "90%",
@@ -133,7 +224,7 @@ const addPodcastStyle = StyleSheet.create({
     width: "100%",
     height: 40,
     padding: 10,
-    marginTop: 20,
+    marginTop: 15,
     borderWidth: 2,
     borderTopColor: "#232323",
     borderRightColor: "#232323",
@@ -148,7 +239,7 @@ const addPodcastStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    marginTop: 100,
+    marginTop: 50,
     alignSelf: "center",
   },
   image: {
@@ -157,6 +248,7 @@ const addPodcastStyle = StyleSheet.create({
     marginTop: 30,
     borderRadius: 100,
     alignSelf: "center",
+    zIndex: 0,
   },
   icon: {
     justifyContent: "center",
@@ -174,5 +266,39 @@ const addPodcastStyle = StyleSheet.create({
     alignSelf: "center",
     marginTop: 5,
     marginBottom: 5,
+  },
+  text: {
+    color: "#f2f2f2",
+    padding: 10,
+  },
+  podCard: {
+    width: "99%",
+    height: 80,
+    marginTop: 5,
+    paddingLeft: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 5,
+    borderColor: "#77FF93",
+    borderWidth: 1,
+  },
+  cardTitle: {
+    color: "#f5f5f5",
+    padding: 10,
+  },
+  camera: {
+    alignSelf: "center",
+  },
+  errorMessage: {
+    marginTop: 10,
+    fontSize: 14,
+    color: "red",
+    alignSelf: "center",
+  },
+  goBack: {
+    position: "absolute",
+    marginTop: 50,
+    marginLeft: 20,
   },
 });

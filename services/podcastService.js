@@ -16,6 +16,22 @@ class PodcastService {
         console.log(error);
       });
   }
+
+  async create(userId, data) {
+    return await axios({
+      url: `${Config.API_URL}/podcast/create/${userId}`,
+      method: "POST",
+      timeout: Config.TIMEOUT_REQUEST,
+      headers: Config.HEADER_REQUEST,
+      data: data,
+    })
+      .then((response) => {
+        return Promise.resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 }
 
 const podcastService = new PodcastService();

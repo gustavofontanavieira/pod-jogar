@@ -16,11 +16,21 @@ import DropDown from "../../components/DropDown";
 import userService from "../../services/userService";
 import podcastService from "../../services/podcastService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import categorieService from "../../services/categoriesService";
 
 export default function Home({ navigation }) {
   const [userId, setUserId] = useState(String);
   const [load, setLoading] = useState(false);
   const [podcasts, setPodcasts] = useState([]);
+  const categories = [];
+  const [items, setItems] = useState(categories);
+  const [value, setValue] = useState(null);
+
+  categorieService.getAllCategories().then((response) => {
+    response.map((item) => {
+      categories.push({ label: item.name, value: item.name.toLowerCase() });
+    });
+  });
 
   const getUserId = async () => {
     const value = await AsyncStorage.getItem("userId");
@@ -34,9 +44,22 @@ export default function Home({ navigation }) {
 
   useEffect(() => {
     if (userId !== "") {
-      podcastService.getAll(userId).then((response) => {
-        setPodcasts(response);
-      });
+      podcastService
+        .getAll(userId)
+        .then((response) => {
+          if (response === undefined) {
+            setPodcasts([
+              {
+                name: "Nenhum podcast encontrado",
+              },
+            ]);
+          } else {
+            setPodcasts(response);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }, [userId]);
 
@@ -69,7 +92,15 @@ export default function Home({ navigation }) {
         </TouchableOpacity>
       </View>
       <View style={homeStyle.listPosition}>
-        <DropDown />
+        {load && (
+          <DropDown
+            items={items}
+            setItems={setItems}
+            categories={categories}
+            value={value}
+            setValue={setValue}
+          />
+        )}
       </View>
       <Text style={homeStyle.mediumHomeText}>Podcasts desta categoria:</Text>
 

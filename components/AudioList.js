@@ -1,15 +1,23 @@
 import { ScrollView } from "react-native-gesture-handler";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
-export default function SelectAudio({ audios }) {
+export default function SelectAudio({ audios, setAudio, setSelectAudio }) {
   return (
     <View style={selectAudioStyle.mainView}>
       <ScrollView style={selectAudioStyle.scroll}>
         {audios.map((item, key) => {
           return (
-            <View style={selectAudioStyle.podCard} key={key}>
-              <Text style={selectAudioStyle.cardTitle}>{item.filename}</Text>
-            </View>
+            <TouchableOpacity
+              key={key}
+              onPress={() => {
+                setAudio(item.uri);
+                setSelectAudio(false);
+              }}
+            >
+              <View style={selectAudioStyle.podCard}>
+                <Text style={selectAudioStyle.cardTitle}>{item.filename}</Text>
+              </View>
+            </TouchableOpacity>
           );
         })}
       </ScrollView>
@@ -19,7 +27,7 @@ export default function SelectAudio({ audios }) {
 
 const selectAudioStyle = StyleSheet.create({
   mainView: {
-    zIndex: 1,
+    zIndex: 1000,
     position: "absolute",
     marginTop: "40%",
     width: "88%",

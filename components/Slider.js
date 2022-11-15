@@ -64,10 +64,11 @@ const sliderComponentStyle = StyleSheet.create({
     alignSelf: "center",
   },
   slider: {
-    width: "100%",
+    width: "90%",
+    alignSelf: "center",
   },
   minutes: {
-    width: 340,
+    width: "90%",
     flexDirection: "row",
     alignSelf: "center",
     marginTop: 20,

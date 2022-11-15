@@ -30,7 +30,15 @@ const Favorites = ({ navigation }) => {
   useEffect(() => {
     if (userId !== "") {
       podcastService.getAll(userId).then((response) => {
-        setPodcasts(response);
+        if (response === undefined) {
+          setPodcasts([
+            {
+              name: "Nenhum podcast favoritado",
+            },
+          ]);
+        } else {
+          setPodcasts(response);
+        }
       });
     }
   }, [userId]);

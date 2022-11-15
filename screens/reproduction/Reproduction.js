@@ -7,7 +7,7 @@ import {
   Animated,
   Easing,
 } from "react-native";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
 
 import { Audio } from "expo-av";
 
@@ -33,13 +33,13 @@ const Reproduction = ({ route, navigation }) => {
       useNativeDriver: false,
     }).start(() => startRotateImageFunction());
   };
-
   startRotateImageFunction();
 
   const [sound, setSound] = useState();
   const [play, setPlay] = useState(false);
   const [seconds, setSeconds] = useState();
   const [slider, setSlider] = useState(false);
+  const [favorite, setFavorite] = useState(false);
 
   async function playSound() {
     const { sound, status } = await Audio.Sound.createAsync({
@@ -70,16 +70,34 @@ const Reproduction = ({ route, navigation }) => {
       : undefined;
   }, [sound]);
 
+  function Favorite() {
+    setFavorite(!favorite);
+  }
+
   return (
     <View style={reproductionStyle.background}>
-      <TouchableOpacity
-        style={reproductionStyle.goBack}
-        onPress={() => {
-          navigation.replace("Main");
-        }}
-      >
-        <AntDesign name="back" color={"#f2f2f2"} size={30} />
-      </TouchableOpacity>
+      <View style={reproductionStyle.topButtons}>
+        <TouchableOpacity
+          style={reproductionStyle.goBack}
+          onPress={async () => {
+            sound === undefined
+              ? navigation.replace("Main")
+              : await sound.stopAsync();
+            navigation.replace("Main");
+          }}
+        >
+          <AntDesign name="back" color={"#f2f2f2"} size={30} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={reproductionStyle.favorite} onPress={Favorite}>
+          <AntDesign
+            name="heart"
+            color={favorite ? "#76FF93" : "#f2f2f2"}
+            size={30}
+          />
+        </TouchableOpacity>
+      </View>
+
       <View style={reproductionStyle.imageFather}>
         <Animated.Image
           source={{ uri: image }}
@@ -101,7 +119,11 @@ const Reproduction = ({ route, navigation }) => {
           <Ionicons name="play-skip-back-outline" color={"#000"} size={30} />
         </TouchableOpacity>
         <TouchableOpacity style={reproductionStyle.pause} onPress={playSound}>
-          <Ionicons name={play ? "play" : "stop"} color={"#000"} size={34} />
+          <Ionicons
+            name={play ? "md-pause" : "play"}
+            color={"#000"}
+            size={34}
+          />
         </TouchableOpacity>
         <TouchableOpacity style={reproductionStyle.skip}>
           <Ionicons name="play-skip-forward-outline" color={"#000"} size={30} />
@@ -123,8 +145,8 @@ const reproductionStyle = StyleSheet.create({
     color: "#f2f2f2",
   },
   imageFather: {
-    width: 310,
-    height: 310,
+    width: 300,
+    height: 300,
     alignSelf: "center",
     marginTop: 100,
   },
@@ -166,7 +188,6 @@ const reproductionStyle = StyleSheet.create({
     alignItems: "center",
   },
   buttons: {
-    marginTop: 20,
     width: 300,
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -176,10 +197,20 @@ const reproductionStyle = StyleSheet.create({
   goBack: {
     width: 30,
     height: 30,
-    marginTop: 50,
-    marginLeft: 25,
     borderRadius: 100,
+  },
+  favorite: {
+    width: 30,
+    height: 30,
+    marginRight: 2,
+    borderRadius: 100,
+  },
+  topButtons: {
     position: "absolute",
-    zIndex: 1,
+    marginTop: 50,
+    flexDirection: "row",
+    width: "85%",
+    alignSelf: "center",
+    justifyContent: "space-between",
   },
 });

@@ -37,14 +37,29 @@ const Profile = ({ navigation }) => {
       userService
         .getUserById(userId)
         .then((response) => {
-          setUserData(response);
-          response.image == null ? "" : setImage({ uri: response.image });
+          if (response === undefined) {
+            setUserData({
+              name: "Não",
+              lastName: "Encontrado",
+            });
+          } else {
+            setUserData(response);
+            response.image == null ? "" : setImage({ uri: response.image });
+          }
         })
         .catch((error) => {
           console.log(error);
         });
       podcastService.getAll(userId).then((response) => {
-        setPodcasts(response);
+        if (response === undefined) {
+          setPodcasts([
+            {
+              name: "Nenhum podcast encontrado",
+            },
+          ]);
+        } else {
+          setPodcasts(response);
+        }
       });
     }
   }, [userId]);

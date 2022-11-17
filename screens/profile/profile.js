@@ -26,9 +26,16 @@ const Profile = ({ navigation }) => {
   const [load, setLoading] = useState(false);
   const [podcasts, setPodcasts] = useState([]);
 
+  const [deletedPodcast, setDeletedPodcast] = useState(false);
+
   const getUserId = async () => {
-    const value = await AsyncStorage.getItem("userId");
-    setUserId(JSON.parse(value));
+    await AsyncStorage.getItem("userId").then((response) => {
+      if (response !== null) {
+        setUserId(JSON.parse(response));
+      } else {
+        setUserData({ name: "não", lastName: "encontrado" });
+      }
+    });
   };
   getUserId();
 
@@ -50,23 +57,27 @@ const Profile = ({ navigation }) => {
         .catch((error) => {
           console.log(error);
         });
-      podcastService.getAll(userId).then((response) => {
-        if (response === undefined) {
-          setPodcasts([
-            {
-              name: "Nenhum podcast encontrado",
-            },
-          ]);
-        } else {
-          setPodcasts(response);
-        }
-      });
+      getAllPodcast();
     }
   }, [userId]);
 
   useEffect(() => {
     setLoading(true);
   }, [podcasts]);
+
+  function getAllPodcast() {
+    podcastService.userPodcasts(userId).then((response) => {
+      if (response === undefined) {
+        setPodcasts([
+          {
+            name: "Nenhum podcast encontrado",
+          },
+        ]);
+      } else {
+        setPodcasts(response);
+      }
+    });
+  }
 
   function updateImage(newImage) {
     const img = { image: newImage };
@@ -104,6 +115,9 @@ const Profile = ({ navigation }) => {
 
   function Quit() {
     setWindowAlert(!windowAlert);
+    setUserData("");
+    setUserId("");
+    setPodcasts([]);
     AsyncStorage.clear().then(() => {
       navigation.navigate("FirstScreen");
     });
@@ -117,6 +131,13 @@ const Profile = ({ navigation }) => {
     title: "Sair da conta",
     paragraph: "Deseja sair da sua conta?",
   };
+
+  useEffect(() => {}, [deletedPodcast]);
+
+  function setDelete() {
+    setDeletedPodcast(true);
+    getAllPodcast();
+  }
 
   return (
     <View style={profileStyle.background}>
@@ -150,7 +171,11 @@ const Profile = ({ navigation }) => {
       >
         <UserPodcasts />
       </TouchableOpacity>
-      <ScrollView>{load && <Card prop={podcasts} />}</ScrollView>
+      <ScrollView>
+        {load && (
+          <Card prop={podcasts} isProfile={true} setDelete={setDelete} />
+        )}
+      </ScrollView>
     </View>
   );
 };

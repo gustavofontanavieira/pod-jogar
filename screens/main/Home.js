@@ -28,9 +28,29 @@ export default function Home({ navigation }) {
 
   categorieService.getAllCategories().then((response) => {
     response.map((item) => {
-      categories.push({ label: item.name, value: item.name.toLowerCase() });
+      categories.push({
+        label: item.name,
+        value: item.name.toLowerCase(),
+        id: item.id,
+      });
     });
   });
+
+  useEffect(() => {
+    if (userId !== "") {
+      podcastService.getPodcastByCategorie(value, userId).then((response) => {
+        if (response === undefined) {
+          setPodcasts([
+            {
+              name: "Nenhum podcast encontrado",
+            },
+          ]);
+        } else {
+          setPodcasts(response);
+        }
+      });
+    }
+  }, [value]);
 
   const getUserId = async () => {
     const value = await AsyncStorage.getItem("userId");
@@ -92,15 +112,13 @@ export default function Home({ navigation }) {
         </TouchableOpacity>
       </View>
       <View style={homeStyle.listPosition}>
-        {load && (
-          <DropDown
-            items={items}
-            setItems={setItems}
-            categories={categories}
-            value={value}
-            setValue={setValue}
-          />
-        )}
+        <DropDown
+          items={items}
+          setItems={setItems}
+          categories={categories}
+          value={value}
+          setValue={setValue}
+        />
       </View>
       <Text style={homeStyle.mediumHomeText}>Podcasts desta categoria:</Text>
 

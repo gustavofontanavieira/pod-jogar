@@ -1,13 +1,6 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import React, { useState } from "react";
-import categorieService from "../services/categoriesService";
 
 export default function DropDown({ items, setItems, value, setValue }) {
   const [open, setOpen] = useState(false);
@@ -31,10 +24,6 @@ export default function DropDown({ items, setItems, value, setValue }) {
 const dropDownPickerStyle = StyleSheet.create({
   list: {
     backgroundColor: "#f2f2f2",
-  },
-  item: {
-    fontSize: 16,
-    marginLeft: 8,
   },
   dropView: {
     width: "90%",

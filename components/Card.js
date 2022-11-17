@@ -1,8 +1,17 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
+import podcastService from "../services/podcastService";
 
-export default function Card({ prop }) {
+export default function Card({ prop, isProfile, setDelete }) {
   const navigation = useNavigation();
+
+  function deletePodcast(podcastId) {
+    podcastService.delete(podcastId).then((response) => {
+      console.log(response);
+      setDelete();
+    });
+  }
 
   return prop.map((item, key) => {
     return (
@@ -20,6 +29,16 @@ export default function Card({ prop }) {
             <Text style={cardStyle.cardTitle}>{item.name}</Text>
             <Text style={cardStyle.cardDescription}>{item.description}</Text>
           </View>
+          {isProfile && (
+            <TouchableOpacity
+              onPress={() => {
+                deletePodcast(item.id);
+              }}
+              style={cardStyle.delete}
+            >
+              <Feather name="trash-2" size={30} color="red" />
+            </TouchableOpacity>
+          )}
         </View>
       </TouchableOpacity>
     );
@@ -58,5 +77,9 @@ const cardStyle = StyleSheet.create({
   podImage: {
     width: "100%",
     height: "100%",
+  },
+  delete: {
+    position: "absolute",
+    marginLeft: "88%",
   },
 });

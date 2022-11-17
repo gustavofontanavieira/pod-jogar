@@ -46,7 +46,7 @@ class UserService {
         if (response === false) {
           return Promise.resolve(response.data);
         } else if (response !== Boolean) {
-          AsyncStorage.setItem("userId", JSON.stringify(response.data));
+          await AsyncStorage.setItem("userId", JSON.stringify(response.data));
           return Promise.resolve(response.data);
         }
       })

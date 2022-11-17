@@ -78,9 +78,15 @@ const AddPodcast = ({ navigation }) => {
 
   categorieService.getAllCategories().then((response) => {
     response.map((item) => {
-      categories.push({ label: item.name, value: item.name.toLowerCase() });
+      categories.push({
+        label: item.name,
+        value: item.name.toLowerCase(),
+        id: item.id,
+      });
     });
   });
+
+  console.log(value);
 
   async function CreatePodcast() {
     const data = {
@@ -91,7 +97,7 @@ const AddPodcast = ({ navigation }) => {
       categoriesId: value,
     };
 
-    const value = await AsyncStorage.getItem("userId");
+    const userDataId = await AsyncStorage.getItem("userId");
 
     if (
       name === "" ||
@@ -102,22 +108,22 @@ const AddPodcast = ({ navigation }) => {
     ) {
       setErrorMessage(true);
     } else {
-      podcastService.create(JSON.parse(value), data).then((response) => {
+      podcastService.create(JSON.parse(userDataId), data).then((response) => {
         setName("");
         setDescription("");
         setImage(null);
         setAudio("");
         setValue(null);
         setErrorMessage(false);
-        () => {
-          navigation.navigate("Home");
-        };
       });
+      () => {
+        navigation.navigation("Main");
+      };
     }
   }
 
   return (
-    <View style={addPodcastStyle.mainView}>
+    <View style={addPodcastStyle.mainView} on>
       <TouchableOpacity
         style={addPodcastStyle.goBack}
         onPress={() => {
@@ -162,7 +168,6 @@ const AddPodcast = ({ navigation }) => {
           <DropDown
             items={items}
             setItems={setItems}
-            categories={categories}
             value={value}
             setValue={setValue}
           />

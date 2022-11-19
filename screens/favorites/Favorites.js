@@ -11,11 +11,13 @@ import {
 } from "react-native";
 import Card from "../../components/Card";
 import podcastService from "../../services/podcastService";
+import userService from "../../services/userService";
 
 const Favorites = ({ navigation }) => {
   const [userId, setUserId] = useState(String);
   const [load, setLoading] = useState(false);
-  const [podcasts, setPodcasts] = useState([]);
+  const findedPodcasts = [];
+  const [podcasts, setPodcasts] = useState(findedPodcasts);
 
   const getUserId = async () => {
     const value = await AsyncStorage.getItem("userId");
@@ -29,7 +31,7 @@ const Favorites = ({ navigation }) => {
 
   useEffect(() => {
     if (userId !== "") {
-      podcastService.getAll(userId).then((response) => {
+      userService.getFavoritesPodcasts(userId).then((response) => {
         if (response === undefined) {
           setPodcasts([
             {
@@ -37,7 +39,18 @@ const Favorites = ({ navigation }) => {
             },
           ]);
         } else {
-          setPodcasts(response);
+          response.forEach((item, index) => {
+            podcastService
+              .getById(item.podcastsId)
+              .then((podcast) => {
+                return findedPodcasts.push(podcast);
+              })
+              .then((r) => {
+                if (r === response.length) {
+                  setPodcasts(findedPodcasts);
+                }
+              });
+          });
         }
       });
     }

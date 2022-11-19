@@ -85,6 +85,36 @@ class UserService {
         Promise.reject(error);
       });
   }
+
+  async favoritePodcast(userId, podcastId) {
+    return await axios({
+      url: `${Config.API_URL}/user/favorite/${userId}/${podcastId}`,
+      method: "POST",
+      timeout: Config.TIMEOUT_REQUEST,
+      headers: Config.HEADER_REQUEST,
+    })
+      .then(async (response) => {
+        return Promise.resolve(response.data);
+      })
+      .catch((error) => {
+        Promise.reject(error);
+      });
+  }
+
+  async getFavoritesPodcasts(userId) {
+    return await axios({
+      url: `${Config.API_URL}/user/getFavoritePodcasts/${userId}`,
+      method: "GET",
+      timeout: Config.TIMEOUT_REQUEST,
+      headers: Config.HEADER_REQUEST,
+    })
+      .then(async (response) => {
+        return Promise.resolve(response.data);
+      })
+      .catch((error) => {
+        Promise.reject(error);
+      });
+  }
 }
 
 const userService = new UserService();

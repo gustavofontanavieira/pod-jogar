@@ -77,6 +77,21 @@ class PodcastService {
         console.log(error);
       });
   }
+
+  async getById(id) {
+    return await axios({
+      url: `${Config.API_URL}/podcast/getPodcastByid/${id}`,
+      method: "GET",
+      timeout: Config.TIMEOUT_REQUEST,
+      headers: Config.HEADER_REQUEST,
+    })
+      .then(async (response) => {
+        return await Promise.resolve(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 }
 
 const podcastService = new PodcastService();

@@ -13,9 +13,19 @@ import { Audio } from "expo-av";
 
 import SliderComponent from "../../components/Slider";
 import { useEffect, useState } from "react";
+import userService from "../../services/userService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Reproduction = ({ route, navigation }) => {
   const { name, description, id, image, file } = route.params;
+
+  const [userId, setUserId] = useState(String);
+
+  const getUserId = async () => {
+    const value = await AsyncStorage.getItem("userId");
+    setUserId(JSON.parse(value));
+  };
+  getUserId();
 
   let rotateValueHolder = new Animated.Value(0);
 
@@ -72,6 +82,9 @@ const Reproduction = ({ route, navigation }) => {
 
   function Favorite() {
     setFavorite(!favorite);
+    userService.favoritePodcast(userId, id).then((response) => {
+      console.log(response);
+    });
   }
 
   return (

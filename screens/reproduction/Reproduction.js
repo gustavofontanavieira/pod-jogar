@@ -80,6 +80,10 @@ const Reproduction = ({ route, navigation }) => {
       : undefined;
   }, [sound]);
 
+  useEffect(() => {
+    navigation.getParent().setOptions({ tabBarStyle: { display: "none" } });
+  }, []);
+
   function Favorite() {
     setFavorite(!favorite);
     userService.favoritePodcast(userId, id).then((response) => {

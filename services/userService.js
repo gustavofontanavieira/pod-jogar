@@ -115,6 +115,21 @@ class UserService {
         Promise.reject(error);
       });
   }
+
+  async disfavorPodcast(userId, favoriteId) {
+    return await axios({
+      url: `${Config.API_URL}/user/disfavor/${userId}/${favoriteId}`,
+      method: "DELETE",
+      timeout: Config.TIMEOUT_REQUEST,
+      headers: Config.HEADER_REQUEST,
+    })
+      .then(async (response) => {
+        return Promise.resolve(response.data);
+      })
+      .catch((error) => {
+        Promise.reject(error);
+      });
+  }
 }
 
 const userService = new UserService();

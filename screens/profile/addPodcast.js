@@ -86,8 +86,6 @@ const AddPodcast = ({ navigation }) => {
     });
   });
 
-  console.log(value);
-
   async function CreatePodcast() {
     const data = {
       name: name,
@@ -109,16 +107,13 @@ const AddPodcast = ({ navigation }) => {
       setErrorMessage(true);
     } else {
       podcastService.create(JSON.parse(userDataId), data).then((response) => {
-        setName("");
-        setDescription("");
+        setName(" ");
+        setDescription(" ");
         setImage(null);
         setAudio("");
         setValue(null);
         setErrorMessage(false);
       });
-      () => {
-        navigation.navigation("Main");
-      };
     }
   }
 
@@ -199,7 +194,12 @@ const AddPodcast = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={addPodcastStyle.button} onPress={CreatePodcast}>
+      <TouchableOpacity
+        style={addPodcastStyle.button}
+        onPress={() => {
+          CreatePodcast(), navigation.navigate("Main");
+        }}
+      >
         <Text>Criar Podcast</Text>
       </TouchableOpacity>
     </View>

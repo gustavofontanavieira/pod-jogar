@@ -1,16 +1,41 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import podcastService from "../services/podcastService";
+import Favorites from "../screens/favorites/Favorites";
+import userService from "../services/userService";
 
-export default function Card({ prop, isProfile, setDelete }) {
+export default function Card({
+  prop,
+  isProfile,
+  setDelete,
+  isFavorite,
+  setDisfavor,
+  userId,
+  favorites,
+}) {
   const navigation = useNavigation();
 
   function deletePodcast(podcastId) {
-    podcastService.delete(podcastId).then((response) => {
-      console.log(response);
+    if (podcastId === undefined || podcastId === null) {
       setDelete();
-    });
+    } else {
+      podcastService.delete(podcastId).then((response) => {
+        console.log(response);
+        setDelete();
+      });
+    }
+  }
+
+  function disfavorPodcast(podcastId) {
+    if (podcastId === undefined || podcastId === null) {
+      setDisfavor();
+    } else {
+      userService.disfavorPodcast(userId, podcastId).then((response) => {
+        console.log(response);
+        setDisfavor();
+      });
+    }
   }
 
   return prop.map((item, key) => {
@@ -37,6 +62,18 @@ export default function Card({ prop, isProfile, setDelete }) {
               style={cardStyle.delete}
             >
               <Feather name="trash-2" size={30} color="red" />
+            </TouchableOpacity>
+          )}
+          {isFavorite && (
+            <TouchableOpacity
+              onPress={() => {
+                favorites[key].id == undefined
+                  ? ""
+                  : disfavorPodcast(favorites[key].id);
+              }}
+              style={cardStyle.delete}
+            >
+              <AntDesign name="heart" size={30} color="#76FF93" />
             </TouchableOpacity>
           )}
         </View>
@@ -81,5 +118,6 @@ const cardStyle = StyleSheet.create({
   delete: {
     position: "absolute",
     marginLeft: "88%",
+    width: 20,
   },
 });

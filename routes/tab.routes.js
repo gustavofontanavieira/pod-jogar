@@ -39,6 +39,7 @@ const Tabs = () => {
           tabBarIcon: ({ size, color }) => (
             <Ionicons name="person" color={color} size={size} />
           ),
+          unmountOnBlur: true,
         }}
       />
 
@@ -49,6 +50,7 @@ const Tabs = () => {
           tabBarIcon: ({ size, color }) => (
             <Ionicons name="heart" color={color} size={size} />
           ),
+          unmountOnBlur: true,
         }}
       />
     </Tab.Navigator>

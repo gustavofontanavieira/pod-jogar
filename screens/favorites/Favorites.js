@@ -16,8 +16,11 @@ import userService from "../../services/userService";
 const Favorites = ({ navigation }) => {
   const [userId, setUserId] = useState(String);
   const [load, setLoading] = useState(false);
+  const [disfavor, setDisfavor] = useState(false);
   const findedPodcasts = [];
   const [podcasts, setPodcasts] = useState(findedPodcasts);
+
+  const [favorites, setFavorites] = useState([]);
 
   const getUserId = async () => {
     const value = await AsyncStorage.getItem("userId");
@@ -29,37 +32,59 @@ const Favorites = ({ navigation }) => {
     setLoading(true);
   }, [podcasts]);
 
+  function getAllFavoritesPodcasts() {
+    userService.getFavoritesPodcasts(userId).then((response) => {
+      if (response === undefined) {
+        setPodcasts([
+          {
+            name: "Nenhum podcast favoritado",
+          },
+        ]);
+      } else {
+        setFavorites(response);
+        response.forEach((item, index) => {
+          podcastService
+            .getById(item.podcastsId)
+            .then((podcast) => {
+              return findedPodcasts.push(podcast);
+            })
+            .then((r) => {
+              if (r === response.length) {
+                setPodcasts(findedPodcasts);
+              }
+            });
+        });
+      }
+    });
+  }
+
   useEffect(() => {
     if (userId !== "") {
-      userService.getFavoritesPodcasts(userId).then((response) => {
-        if (response === undefined) {
-          setPodcasts([
-            {
-              name: "Nenhum podcast favoritado",
-            },
-          ]);
-        } else {
-          response.forEach((item, index) => {
-            podcastService
-              .getById(item.podcastsId)
-              .then((podcast) => {
-                return findedPodcasts.push(podcast);
-              })
-              .then((r) => {
-                if (r === response.length) {
-                  setPodcasts(findedPodcasts);
-                }
-              });
-          });
-        }
-      });
+      getAllFavoritesPodcasts();
     }
   }, [userId]);
+
+  useEffect(() => {}, [disfavor]);
+
+  function DisfavorPodcast() {
+    setDisfavor(!disfavor);
+    getAllFavoritesPodcasts();
+  }
 
   return (
     <View style={favoritesStyle.mainView}>
       <Text style={favoritesStyle.text}>Podcast favoritados</Text>
-      <ScrollView>{load && <Card prop={podcasts} />}</ScrollView>
+      <ScrollView>
+        {load && (
+          <Card
+            prop={podcasts}
+            isFavorite={true}
+            setDisfavor={DisfavorPodcast}
+            userId={userId}
+            favorites={favorites}
+          />
+        )}
+      </ScrollView>
     </View>
   );
 };

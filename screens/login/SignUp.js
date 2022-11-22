@@ -35,6 +35,11 @@ export default function SignUp({ navigation }) {
       lastName: lastName,
     };
 
+    let login = {
+      email: email,
+      passowrd: password,
+    };
+
     if (password === confirmPassword && password.length >= 6) {
       setPasswordError(false);
       setEmailError(false);
@@ -42,9 +47,11 @@ export default function SignUp({ navigation }) {
         if (response === "E-mail já existente") {
           setEmailError(true);
         } else {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "Main" }],
+          userService.login(login).then((response) => {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "Main" }],
+            });
           });
         }
       });

@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import podcastService from "../services/podcastService";
-import Favorites from "../screens/favorites/Favorites";
 import userService from "../services/userService";
 
 export default function Card({

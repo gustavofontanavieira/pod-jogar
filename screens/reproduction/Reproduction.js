@@ -7,7 +7,7 @@ import {
   Animated,
   Easing,
 } from "react-native";
-import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 import { Audio } from "expo-av";
 
@@ -27,67 +27,66 @@ const Reproduction = ({ route, navigation }) => {
   };
   getUserId();
 
-  let rotateValueHolder = new Animated.Value(0);
-
-  const RotateData = rotateValueHolder.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", "360deg"],
-  });
-
-  const startRotateImageFunction = () => {
-    rotateValueHolder.setValue(0);
-    Animated.timing(rotateValueHolder, {
-      toValue: 1,
-      duration: 20000,
-      easing: Easing.linear,
-      useNativeDriver: false,
-    }).start(() => startRotateImageFunction());
-  };
-  startRotateImageFunction();
-
-  const [sound, setSound] = useState();
+  const [podcast, setPodcast] = useState();
+  const [infos, setInfos] = useState();
   const [play, setPlay] = useState(false);
   const [seconds, setSeconds] = useState();
   const [slider, setSlider] = useState(false);
   const [favorite, setFavorite] = useState(false);
 
-  async function playSound() {
+  async function getSound() {
     const { sound, status } = await Audio.Sound.createAsync({
       uri: file,
     });
-    setSound(sound);
+    setPodcast(sound);
+    setInfos(status);
+    setSeconds(status.durationMillis);
+    setSlider(true);
+  }
 
+  async function Play() {
     try {
       if (play === true) {
         setPlay(false);
-        await sound.stopAsync();
+        await podcast.stopAsync();
       } else {
-        setSeconds(status.durationMillis);
         setPlay(true);
-        setSlider(true);
-        await sound.playAsync();
+        await podcast.playAsync();
       }
     } catch (err) {
-      console.log("Som não achado");
+      await getSound();
+      podcast.unloadAsync();
     }
   }
 
+  /*  const interval = setInterval(() => setTime(Date.now()), 5000);
+  useEffect(async () => {
+    infos === undefined
+      ? ""
+      : (clearInterval(interval),
+        setPosition((await sound.setStatusAsync()).positionMillis));
+  }, []);
+ */
   useEffect(() => {
-    return sound
+    if (podcast === undefined) {
+      getSound();
+    }
+    return podcast !== undefined
       ? () => {
-          sound.unloadAsync();
+          podcast.unloadAsync();
         }
       : undefined;
-  }, [sound]);
+  }, [podcast]);
 
   useEffect(() => {
     navigation.getParent().setOptions({ tabBarStyle: { display: "none" } });
   }, []);
 
-  function Favorite() {
+  function FavoritePodcast() {
     setFavorite(!favorite);
+
     userService.favoritePodcast(userId, id).then((response) => {
-      console.log(response);
+      console.log("favoritado");
     });
   }
 
@@ -97,16 +96,19 @@ const Reproduction = ({ route, navigation }) => {
         <TouchableOpacity
           style={reproductionStyle.goBack}
           onPress={async () => {
-            sound === undefined
+            podcast === undefined
               ? navigation.replace("Main")
-              : await sound.stopAsync();
+              : await podcast.stopAsync();
             navigation.replace("Main");
           }}
         >
           <AntDesign name="back" color={"#f2f2f2"} size={30} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={reproductionStyle.favorite} onPress={Favorite}>
+        <TouchableOpacity
+          style={reproductionStyle.favorite}
+          onPress={FavoritePodcast}
+        >
           <AntDesign
             name="heart"
             color={favorite ? "#76FF93" : "#f2f2f2"}
@@ -118,10 +120,7 @@ const Reproduction = ({ route, navigation }) => {
       <View style={reproductionStyle.imageFather}>
         <Animated.Image
           source={{ uri: image }}
-          style={[
-            reproductionStyle.image,
-            { transform: [{ rotate: RotateData }] },
-          ]}
+          style={reproductionStyle.image}
         />
       </View>
       <View style={reproductionStyle.text}>
@@ -130,19 +129,21 @@ const Reproduction = ({ route, navigation }) => {
           {description || "descrição"}
         </Text>
       </View>
-      {slider && <SliderComponent prop={seconds} />}
+      {slider && (
+        <SliderComponent prop={seconds} infos={infos} podcast={podcast} />
+      )}
       <View style={reproductionStyle.buttons}>
         <TouchableOpacity style={reproductionStyle.return}>
           <Ionicons name="play-skip-back-outline" color={"#000"} size={30} />
         </TouchableOpacity>
-        <TouchableOpacity style={reproductionStyle.pause} onPress={playSound}>
+        <TouchableOpacity style={reproductionStyle.pause} onPress={Play}>
           <Ionicons
             name={play ? "md-pause" : "play"}
             color={"#000"}
             size={34}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={reproductionStyle.skip}>
+        <TouchableOpacity style={reproductionStyle.skip} onPress={Play}>
           <Ionicons name="play-skip-forward-outline" color={"#000"} size={30} />
         </TouchableOpacity>
       </View>

@@ -158,10 +158,6 @@ const Profile = ({ navigation }) => {
           <Text style={profileStyle.userName}>
             {`${userData.name} ${userData.lastName}`}
           </Text>
-          <Text style={profileStyle.description}>
-            To indo pra lá e pra cá sem saber ao certo quem sou mas tenho
-            certeza que sou uma pessoa
-          </Text>
         </View>
       </View>
       <TouchableOpacity
@@ -193,7 +189,7 @@ const profileStyle = StyleSheet.create({
   },
   userContainer: {
     flexDirection: "row",
-    width: "95%",
+    width: "90%",
     alignSelf: "center",
     marginTop: 50,
     height: 164,
@@ -202,10 +198,6 @@ const profileStyle = StyleSheet.create({
   userPicContainer: {
     width: "34%",
   },
-  userDescContainer: {
-    width: "66%",
-    padding: 8,
-  },
   userPic: {
     width: 120,
     height: 120,
@@ -213,11 +205,10 @@ const profileStyle = StyleSheet.create({
   },
   userName: {
     color: "#f2f2f2",
-    fontSize: 20,
+    fontSize: 18,
   },
-  description: {
-    color: "#f2f2f2",
-    marginTop: 8,
+  userDescContainer: {
+    marginLeft: 20,
   },
   goBack: {
     width: 30,
